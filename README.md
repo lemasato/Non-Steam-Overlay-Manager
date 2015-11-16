@@ -9,6 +9,7 @@ It requires minimal set-up and should be working for every games.
 	Example: "D:\Jeux\Grand Fantasia\Launcher.exe"  
 	Becomes: "C:\Windows\System32\cscript.exe" "D:\Jeux\Grand Fantasia\SteamOverlayFix.vbs"  
   - Feel free to click on "Choose Icon" and select whichever .exe's icon you like the most.  
-You're now set to go! Running the shortcut from Steam should let you use the Steam Overlay while playing your favorite games!
-	 
+You're now set to go!  
+Running the shortcut from Steam should let you use the Steam Overlay while playing your favorite games!  
+  
 Download: https://github.com/lemasato/Steam-Overlay-for-Launchers/releases/download/1.0/SteamOverlayFixv1.0.zip
