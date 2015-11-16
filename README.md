@@ -1,4 +1,4 @@
-This script allows the use of the Steam Overlay in games that uses a launcher (mostly mmos)
+This script allows the use of the Steam Overlay in games that uses a launcher (mostly mmos)  
 It requires minimal set-up and should be working for every games.
   - Save the script inside the game's directory.
   - Open Steam and click on "Games > Add a Non-Steam Game to My Library"
