@@ -10,7 +10,7 @@ Download: coming
 	Kirsch for his shorter version (which is the one i started off)
 	http://us.battle.net/hearthstone/en/forum/topic/9882829213?page=4#68
 	Creators of the ReadIni WriteIni BrowseForFile functions (credited in said functions)
-	[Heroku][1]
-	 [1]: http://heroku.com/
+[Heroku][1]
+[1]: http://heroku.com/
 																-masato
 
