@@ -1,15 +1,14 @@
 This script allows the use of the Steam Overlay in games that uses a launcher (mostly mmos)
-  - Save the script to the directory where game is installed
-  - Open Steam and use "Add a Non-Steam Game to My Library..."
-  - Change the Target field to:
+It requires minimal set-up and should be working for every games.
+  - Save the script inside the game's directory.
+  - Open Steam and click on "Games > Add a Non-Steam Game to My Library"
+  - Browse to your game folder, select the launcher.exe and add it.
+  - Now Find your game in your Steam Library, right click > properties.
+  - Change the "Target" field to (quotes included):
   "C:\Windows\System32\cscript.exe" "GameDirectory\SteamOverlayFix.vbs"
+	Example: "D:\Jeux\Grand Fantasia\Launcher.exe"
+	Becomes: "C:\Windows\System32\cscript.exe" "D:\Jeux\Grand Fantasia\SteamOverlayFix.vbs"
+  - Feel free to click on "Choose Icon" and select whichever .exe's icon you like the most.
+You're now set to go! Running the shortcut from Steam should let you use the Steam Overlay while playing your favorite games!
 	 
 Download: coming
-
-THANKS TO: [Karmond][1]: http://us.battle.net/hearthstone/en/forum/topic/9882829213?page=1#14 for the original script
-Kirsch for his shorter version (which is the one i started off)
-http://us.battle.net/hearthstone/en/forum/topic/9882829213?page=4#68
-Creators of the ReadIni WriteIni BrowseForFile functions (credited in said functions)
-
-																-masato
-
