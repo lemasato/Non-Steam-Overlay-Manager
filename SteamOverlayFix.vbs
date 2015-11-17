@@ -88,7 +88,7 @@ scriptDir = Replace(WScript.ScriptFullName, WScript.ScriptName, "")
 	scriptHome = WScript.ScriptFullName
 	scriptHome = Left(scriptHome, InStr(scriptHome, WScript.ScriptName) - 1)
 
-	'WScript.Echo "[1/5] starting laucher"
+	WScript.Echo "[1/5] starting laucher"
 	SET objShell = WScript.CreateObject("Shell.Application")
 	objShell.ShellExecute lName, "", lPath
 
