@@ -39,4 +39,4 @@ Becomes: "C:\Windows\System32\cscript.exe" "D:\Jeux\Grand Fantasia\SteamOverlayF
         Creators of the ReadIni WriteIni BrowseForFile functions (credited in said functions)  
 
 version: 1.01 (15/01/16)  
-Download: 
+Download: https://github.com/lemasato/Steam-Overlay-for-Launchers/releases/download/1.01/SteamOverlayFix.zip
