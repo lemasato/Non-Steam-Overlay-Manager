@@ -4,6 +4,8 @@ Use the Steam Overlay in **any** game.
 *The interface for this tool is still in development.*  
 *Main core features are already available.*  
 
+https://discord.gg/7B9XgCY
+
 ### How do I use it?  
 1. Head to the [releases](https://github.com/lemasato/Non-Steam-Overlay-Manager/releases) tab to download the latest NSO-Manager.exe.  
 1. Then, simply run the executable to set up your profiles and settings. When finished, head to your Steam library.  
