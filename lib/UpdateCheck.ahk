@@ -55,7 +55,7 @@ ShowUpdatePrompt(ver, dl) {
 	.										 "`nThe entire updating process is automated."
 	IfMsgBox, Yes
 	{
-		success := FileDownload(ProgramValues.Updater_Link, ProgramValues.Updater_File)
+		success := Download(ProgramValues.Updater_Link, ProgramValues.Updater_File)
 		if (success)
 			Run_Updater(dl)
 	}

@@ -183,6 +183,7 @@ Return
 
 #Include %A_ScriptDir%/lib/third-party
 #Include AddToolTip.ahk
+#Include Download.ahk
 #Include JSON.ahk
 
 if (A_IsCompiled) {
