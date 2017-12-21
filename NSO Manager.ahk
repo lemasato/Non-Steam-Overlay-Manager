@@ -64,7 +64,7 @@ Start_Script() {
 
 	ProgramValues.Name 					:= "NSO Manager"
 	ProgramValues.Version 				:= "0.1"
-	ProgramValues.Branch 				:= "NSO"
+	ProgramValues.Branch 				:= "master"
 	ProgramValues.Github_User 			:= "lemasato"
 	ProgramValues.GitHub_Repo 			:= "Non-Steam-Overlay-Manager"
 
@@ -110,6 +110,8 @@ Start_Script() {
 	ProgramSettings.Steam_Overlay.Hotkey_String := Ini.Get(ProgramValues.INI_File, "Steam_Overlay", "Hotkey_String")
 
 	UpdateCheck(0, 1)
+
+	Menu,Tray,Icon
 
 	;__ Get local config profiles
 	params := Get_CmdLineParameters()

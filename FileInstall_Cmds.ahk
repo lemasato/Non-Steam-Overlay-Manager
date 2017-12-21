@@ -34,23 +34,6 @@ if (ErrorLevel)
 	. "Flag: 2"
 
 ; ----------------------------
-if !InStr(FileExist(ProgramValues.Resources_Folder ""), "D")
-	FileCreateDir,% ProgramValues.Resources_Folder ""
-
-FileGetSize, sourceFileSize, resources\test.txt
-if (A_IsCompiled)
-	destFileSize := Get_ResourceSize("resources\test.txt", ProgramValues.Resources_Folder "\test.txt")
-else FileGetSize, destFileSize, % ProgramValues.Resources_Folder "\test.txt"
-
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\test.txt, % ProgramValues.Resources_Folder "\test.txt", 1
-if (ErrorLevel)
-	Msgbox % "Failed to extract file!"
-	. "Source: resources\test.txt"
-	. "Dest: " ProgramValues.Resources_Folder "\test.txt"
-	. "Flag: 2"
-
-; ----------------------------
 if !InStr(FileExist(ProgramValues.Resources_Folder "\ExternalOverlay"), "D")
 	FileCreateDir,% ProgramValues.Resources_Folder "\ExternalOverlay"
 
