@@ -3,7 +3,7 @@
 
 	SplitPath, A_ScriptFullPath, , scriptFolder
 	SplitPath, scriptFolder, , parentFolder
-	Run, %parentFolder%/Non-Steam Overlay Manager.ahk
+	Run, %parentFolder%/NSO Manager.ahk
 	Exitapp
 }
 
@@ -173,7 +173,7 @@ Class GUI_Main {
 		GUI_Main_Values.Ini_File := profilesINI
 
 		; Show the gui
-		Gui, Main:Show ;, w575 h410
+		Gui, Main:Show, ,% ProgramValues.Name " v" ProgramValues.Version
 		WinWait, ahk_id %hGUI_Main%
 		WinWaitClose, ahk_id %hGUI_Main%
 		return

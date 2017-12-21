@@ -1,4 +1,8 @@
-﻿Download(url, file) {
+﻿/*	Allows showing a progress download bar
+	Usage: Download(url, file)
+*/
+
+Download(url, file) {
 /*		Credits to joedf
 		autohotkey.com/board/topic/17915-urldownloadtofile-progress/?p=584346
 */
@@ -38,4 +42,3 @@ DL_Progress( pthis, nP=0, nPMax=0, nSC=0, pST=0 ) {
 	}
 	return 0
 }
-
