@@ -73,7 +73,7 @@ Start_Script() {
 	ProgramValues.Local_Folder 			:= A_MyDocuments "\AutoHotkey\" ProgramValues.Name
 	ProgramValues.Resources_Folder 		:= ProgramValues.Local_Folder "\resources"
 
-	ProgramValues.External_Overlay 		:= ProgramValues.Resources_Folder "\ExternalOverlay\ExternalOverlay.exe"
+	ProgramValues.External_Overlay 		:= ProgramValues.Resources_Folder "\NSO Overlay\NSO Overlay.exe"
 	ProgramValues.Ini_File 				:= ProgramValues.Local_Folder "\Preferences.ini"
 	ProgramValues.Profiles_File 		:= ProgramValues.Local_Folder "\Profiles.ini"
 
@@ -102,6 +102,7 @@ Start_Script() {
 ;	Startup
 	Tray_Refresh()
 	Create_Local_File()
+	Update_Local_Config()
 
 	AssetsExtract()
 	ShellMessage_Enable()

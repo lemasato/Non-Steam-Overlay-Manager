@@ -11,26 +11,29 @@
 	installFile := A_ScriptDir "\FileInstall_Cmds.ahk"
 	FileDelete,% installFile
 
-;	File_Install.ahk
-	appendToFile := "#SingleInstance Force`n"
-				 .	"#NoTrayIcon`n`n"
+;	Pass ProgramValues to file
+	appendToFile := "#SingleInstance Force"
+	. "`n"			"#NoTrayIcon"
+	. "`n`n"
 
 	appendToFile .= "if (!A_IsCompiled && A_ScriptName = ""FileInstall_Cmds.ahk"") {"
 	. "`n"			"	#Include %A_ScriptDir%/lib/Get_ResourceSize.ahk"
+	. "`n"
+	. "`n"			"	tempParams := {}"
+	. "`n"			"	Loop, %0% {"
+	. "`n"			"		param := `%A_Index`%"
+	. "`n"			"		if RegExMatch(param, ""/Resources_Folder=(.*)"", found)"
+	. "`n"			"			tempParams.Resources_Folder := found1"
+	. "`n"			"		ProgramValues := tempParams"
+	. "`n"			"	}"
+	. "`n"
+	. "`n"			"	FileInstall_Cmds()"
 	. "`n" 			"}"
+	. "`n; --------------------------------"
 	. "`n`n"
 
-;	Pass ProgramValues to file
-	appendToFile .= "tempParams := {}"
-	. "`n"			"Loop, %0% {"
-	. "`n"			"	param := `%A_Index`%"
-	. "`n"			"	if RegExMatch(param, ""/Resources_Folder=(.*)"", found)"
-	. "`n"			"		tempParams.Resources_Folder := found1"
-	. "`n"			"	ProgramValues := tempParams"
-	. "`n"			"}"
-	. "`n"
-	. "`n; --------------------------------"
-	. "`n"			"FileInstall_Cmds() {"
+
+	appendToFile .= "FileInstall_Cmds() {"
 	. "`n"			"global ProgramValues"
 	. "`n`n"
 
@@ -47,17 +50,17 @@
 			appendToFile .= FileInstall("""" filePath """", "ProgramValues.Resources_Folder """ "\" A_LoopFileName """", 2)
 	} 
 
-;	\resources\ExternalOverlay\
-	resFolder := A_ScriptDir "\resources\ExternalOverlay"
-	allowedFile := "ExternalOverlay.exe"
+;	\resources\NSO Overlay\
+	resFolder := A_ScriptDir "\resources\NSO Overlay"
+	allowedFile := "NSO Overlay.exe"
 
 	Loop, Files,% resFolder "\*"
 	{
-		RegExMatch(A_LoopFileFullPath, "\\resources\\ExternalOverlay\\(.*)", path)
-		filePath := "resources\ExternalOverlay\" path1
+		RegExMatch(A_LoopFileFullPath, "\\resources\\NSO Overlay\\(.*)", path)
+		filePath := "resources\NSO Overlay\" path1
 
 		if A_LoopFileName in %allowedFile%
-			appendToFile .= FileInstall("""" filePath """", "ProgramValues.Resources_Folder """ "\ExternalOverlay\" A_LoopFileName """", 2)
+			appendToFile .= FileInstall("""" filePath """", "ProgramValues.Resources_Folder """ "\NSO Overlay\" A_LoopFileName """", 2)
 	}
 
 	appendToFile .= "`n}"

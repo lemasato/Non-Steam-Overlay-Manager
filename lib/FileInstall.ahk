@@ -40,9 +40,9 @@ FileInstall(source, dest, flag=0) {
 
 	appendToFile .= "`nif (ErrorLevel)"
 	. "`n"			"	Msgbox % ""Failed to extract file!"""
-	. "`n"			"	. ""Source: " sourceNoQuotes """"
-	. "`n"			"	. ""Dest: "" " dest 
-	. "`n"			"	. ""Flag: " flag """"
+	. "`n"			"	. ""``nSource: " sourceNoQuotes """"
+	. "`n"			"	. ""``nDest: "" " dest 
+	. "`n"			"	. ""``nFlag: " flag """"
 
 	appendToFile .= "`n`n; ----------------------------`n"
 	Return appendToFile

@@ -41,3 +41,10 @@
 	}
 
 }
+
+Update_Local_Config() {
+	global ProgramValues
+
+	if InStr(FileExist(ProgramValues.Resources_Folder "\ExternalOverlay"), "D") 
+		FileRemoveDir,% ProgramValues.Resources_Folder "\ExternalOverlay", 1
+}
