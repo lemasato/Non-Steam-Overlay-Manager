@@ -81,12 +81,12 @@
 				IniWrite,% value,% file,% newSect,% key
 			}
 		}
-		else if (newSect && newKey) && (curSect != newSect || curKey != curKey) {
+		else if (newSect && newKey) && (curSect != newSect || curKey != newKey) {
 			; New sect and key exists. And either of them is different from the original.
 			; Set the new key and delete the original.
 
 			IniRead, value,% file,% curSect,% curKey
-			IniDelete,% file,% newSect,% newKey
+			IniDelete,% file,% newSect,% curKey
 			IniWrite,% value,% file,% newSect,% newKey
 		}
 		else {
