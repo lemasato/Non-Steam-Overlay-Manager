@@ -1,6 +1,10 @@
-_Convert_*.ahk
-_Archive/*
+/resources/NSO Overlay/_Build/*
+/resources/NSO Overlay/_Source/*
+
+/_Archive/*
+/_Convert*.ahk
 verpatch.exe
+/_TODO.txt
 
 # ========================
 
