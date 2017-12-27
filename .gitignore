@@ -2,6 +2,7 @@
 /resources/NSO Overlay/_Source/*
 
 /_Archive/*
+/_Testings/*
 /_Convert*.ahk
 verpatch.exe
 /_TODO.txt
