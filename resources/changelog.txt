@@ -1,16 +1,24 @@
-v0.1.1 (24 Dec 2017)
+-----------------------
+v0.2 (27 Dec 2017)
+	Features:
+	- A warning box will appear if your game is running elevated while Steam is not.
+	Info: Having the game elevated but not Steam will causes the Steam Overlay to be unable to hook to your game (or our NSO Overlay).
+	- A warning box will appear if the Steam Overlay fails to hook to our NSO Overlay.
+	
 	Changes:
-	- The ExternalOverlay executable is now using Unity. It has also been renamed to "NSO Overlay.exe"
+	- The "ExternalOverlay" executable is now using Unity. It has also been renamed to "NSO Overlay"
 	This results in a smaller file (from 42mb to 12mb), as well as less memory usage (from ~360mb to ~70mb).
 	I'm sure improvements can still be done but I'm very unfamiliar with DirectX Apps, let alone Unity.
-	- Any field referring to "External Overlay" has been changed to "NSO Overlay".
-	
-	- Minor modifications to the tool's icon.
+	- Any field referring to "External Overlay" has been updated to "NSO Overlay".
+	Your local .ini files will automatically be updated accordingly.
+	- Minor modifications to the icon.
 	
 	Fixes:
 	- Assets would not extract correctly when using the ahk source.
-	
+	- Profile settings could be changed without any profile being selected.
+	This would cause invalid profile (such as [0],[1] or [Profiles]) names to be written to the Profiles.ini file.
+	- The checkbox settings would retrieve the profile name from the "Name:" edit field, instead of from the profiles list.
 
 -----------------------
 v0.1 (21 Dec 2017):
-	- Initially published on Github.
+	- Initially published on GitHub.
