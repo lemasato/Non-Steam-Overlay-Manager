@@ -26,7 +26,7 @@
  		if !(l_profName)
 			Return
 	
-		INI.Set(ProgramValues.Ini_File, "External_Overlay", "Hotkey", BetterHK_CTRL_mod SubStr(A_ThisHotkey,2))
+		INI.Set(ProgramValues.Ini_File, "NSO_Overlay", "Hotkey", BetterHK_CTRL_mod SubStr(A_ThisHotkey,2))
 	}
 	return
 #If

@@ -1,35 +1,81 @@
-﻿Get_Windows_List(mode, filterType="", filter="") {
+﻿Get_Windows_Title(_filter="", _filterType="", _delimiter="`n") {
+	returnList := Get_Windows_List(_filter, _filterType, _delimiter, "Title")
+	return returnList
+}
 
-	WinGet, winHwnd, List
-	returnArr := []
-	valuesList := "0"
+Get_Windows_PID(_filter="", _filterType="", _delimiter=",") {
+	returnList := Get_Windows_List(_filter, _filterType, _delimiter, "PID")
+	return returnList
+}
 
-	if mode in Exe,ProcessName
-		cmd := "ProcessName"
-	else if mode in PID
-		cmd := "PID"
-	else if mode in ID
-		cmd := ID
+Get_Windows_ID(_filter="", _filterType="", _delimiter=",") {
+	returnList := Get_Windows_List(_filter, _filterType, _delimiter, "ID")
+	return returnList
+}
 
-	if (filterType = "Title")
-		filterCmd := filter
-	else if filterType in exe,id,pid
-		filterCmd := "ahk_" filterType " " filter
+Get_Windows_Exe(_filter="", _filterType="", _delimiter=",") {
+	returnList := Get_Windows_List(_filter, _filterType, _delimiter, "Exe")
+	return returnList
+}
+
+Get_Windows_List(_filter, _filterType, _delimiter, _what) {
+
+	_whatAllowed := "ID,PID,ProcessID,Exe,ProcessName,Title"
+	if !IsIn(_what, _whatAllowed) {
+		Msgbox %A_ThisFunc%(): "%_what%" is not allowed`nAllowed: %_whatAllowed%
+		return
+	}
+	_filterTypeAllowed := "ahk_exe,ahk_id,ahk_pid,Title"
+	if !IsIn(_filterType, _filterTypeAllowed) {
+		Msgbox %A_ThisFunc%(): "%_filterType%" is not allowed`nAllowed: %_filterTypeAllowed%
+		return
+	}
+
+	; Assign Cmd
+	Cmd := (IsIn(_what, "PID,ProcessID"))?("PID")
+			:(IsIn(_what, "Exe,ProcessName"))?("ProcessName")
+			:(_what)
+
+	; Assign filter
+	filter := (IsIn(_filterType, "ahk_exe,ahk_id,ahk_pid"))?(_filterType " " _filter):(_filter)
+
+	; Assign return
+	valuesList := ""
+	if IsIn(_delimiter, "Array,[]")
+		returnList := []
 	else
-		filterCmd := ""
+		returnList := ""
 
-	Loop, %winHwnd% 
-	{
-		WinGet, value, %cmd%,% filterCmd " ahk_id " winHwnd%A_Index%
-		if (value) {
-			if value not in %valuesList%
-			{
-				valuesList .= "," value
-				returnArr.Push(value)
-			}
+	; Loop through pseudo array
+	WinGet, winHwnds, List
+	Loop, %winHwnds% {
+		loopField := winHwnds%A_Index%
+		if (_what = "Title")
+			WinGetTitle, value, %filter% ahk_id %loopField%
+		else 
+			WinGet, value, %Cmd%, %filter% ahk_id %loopField%
+
+		if (value) && !IsIn(value, valuesList) {
+			valuesList := (valuesList)?(valuesList "," value):(value)
+
+			if IsIn(_delimiter, "Array,[]")
+				returnList.Push(value)
+			else
+				returnList := (returnList)?(returnList . _delimiter . value):(value)
 		}
 	}
-	return returnArr
+
+	Return returnList
+}
+
+IsIn(_string, _list) {
+	if _string in %_list%
+		return True
+}
+
+IsContaining(_string, _keyword) {
+	if _string contains %_keyword%
+		return True
 }
 
 CoordMode(obj="") {

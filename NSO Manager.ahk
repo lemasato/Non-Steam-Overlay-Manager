@@ -31,7 +31,8 @@ Menu,Tray,Add,Close,Exit
 Menu,Tray,Icon
 
 GroupAdd, ScriptPID,% "ahk_pid " DllCall("GetCurrentProcessId")
-GroupAdd, GameGroup, ahk_exe Overlay.exe
+
+Hotkey, f1, NSO_Overlay_Toggle
 
 Start_Script()
 Return
@@ -48,18 +49,31 @@ Return
 Return
 
 
-#IfWinActive, ahk_group GameGroup
+#IfWinActive
 
-ExternalOverlay_Toggle:
-	ExternalOverlay_Toggle()
+NSO_Overlay_Toggle:
+	WinGet, activeProcess, ProcessName, A
+	if activeProcess in %AllowedProcessForOverlay%
+	{
+		NSO_Overlay_Toggle()
+		Sleep 100
+	}
+	else {
+		Hotkey, $%A_ThisHotkey%, %A_ThisLabel%, Off
+		Sleep 10
+		SendInput, %A_ThisHotkey%
+		Sleep 10
+		ShowToolTip("This process is not allowed to toggle the NSO Overlay.`nAllowed: " AllowedProcessForOverlay)
+		Hotkey, $%A_ThisHotkey%, %A_ThisLabel%, On
+	}
 Return
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Start_Script() {
 	global ProgramValues := {}
 	global ProgramSettings := {}
+	global AllowedProcessForOverlay
 	global OVERLAY_PID
 
 	ProgramValues.Name 					:= "NSO Manager"
@@ -73,7 +87,7 @@ Start_Script() {
 	ProgramValues.Local_Folder 			:= A_MyDocuments "\AutoHotkey\" ProgramValues.Name
 	ProgramValues.Resources_Folder 		:= ProgramValues.Local_Folder "\resources"
 
-	ProgramValues.External_Overlay 		:= ProgramValues.Resources_Folder "\NSO Overlay\NSO Overlay.exe"
+	ProgramValues.NSO_Overlay 			:= ProgramValues.Resources_Folder "\NSO Overlay\NSO Overlay.exe"
 	ProgramValues.Ini_File 				:= ProgramValues.Local_Folder "\Preferences.ini"
 	ProgramValues.Profiles_File 		:= ProgramValues.Local_Folder "\Profiles.ini"
 
@@ -83,6 +97,8 @@ Start_Script() {
 	ProgramValues.Updater_Link 			:= "https://raw.githubusercontent.com/" ProgramValues.Github_User "/" ProgramValues.GitHub_Repo "/" ProgramValues.Branch "/Updater_v2.exe"
 
 	ProgramValues.PID 					:= DllCall("GetCurrentProcessId")
+
+	AllowedProcessForOverlay 			:= A_ScriptName ",NSO Overlay.exe"
 
 	SetWorkingDir,% ProgramValues.Local_Folder
 ;	- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -118,29 +134,27 @@ Start_Script() {
 	params := Get_CmdLineParameters()
 	for nothing, parameter in params {
 		if RegExMatch(parameter, "/Profile=(.*)", match) {
-			param_Profile := match1
+			global PARAM_PROFILE
+			PARAM_PROFILE := match1
 			match1 := ""
 		}
 	}
 
-	if (param_Profile) { ; Running with profile param
-		launcher := INI.Get(ProgramValues.Profiles_File, param_Profile, "Launcher")
-		client := INI.Get(ProgramValues.Profiles_File, param_Profile, "Client")
-		enableLauncher := INI.Get(ProgramValues.Profiles_File, param_Profile, "Enable_Launcher")
-		useExternalOverlay := INI.Get(ProgramValues.Profiles_File, param_Profile, "Use_External_Overlay")
+	if (PARAM_PROFILE) { ; Running with profile param
+		launcher := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Launcher")
+		client := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Client")
+		enableLauncher := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Enable_Launcher")
+		useNSOOverlay := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Use_NSO_Overlay")
 
-		global EXTERNAL_OVERLAY_ENABLED := useExternalOverlay
-
-		SplitPath, client, clientFileName
-		GroupAdd, GameGroup, ahk_exe %clientFileName%
+		global NSO_OVERLAY_ENABLED := useNSOOverlay
 
 		if (client && launcher) && FileExist(client) && FileExist(launcher) { ; Profile exists and is valid
-			Menu,Tray,Tip,% ProgramValues.Name "`nProfile: " param_Profile
+			Menu,Tray,Tip,% ProgramValues.Name "`nProfile: " PARAM_PROFILE
 
-			if (useExternalOverlay) {
-				ExternalOverlay_Run()
-				overlayHotkey := INI.Get(ProgramValues.INI_File, "External_Overlay", "Hotkey")
-				Hotkey, %overlayHotkey%, ExternalOverlay_Toggle, On
+			if (useNSOOverlay) {
+				NSO_Overlay_Run()
+				overlayHotkey := INI.Get(ProgramValues.INI_File, "NSO_Overlay", "Hotkey")
+				Hotkey, %overlayHotkey%, NSO_Overlay_Toggle, On
 			}
 			if (enableLauncher)
 				NonSteam_Run(launcher, client)
@@ -150,7 +164,7 @@ Start_Script() {
 			ExitApp ; Exit app upon game closure
 		}
 		else { ; Either not a profile or locations invalid
-			MsgBox, 4096,% ProgramValues.Name,% "Unable to launch the profile: " param_Profile
+			MsgBox, 4096,% ProgramValues.Name,% "Unable to launch the profile: " PARAM_PROFILE
 			.									"`nLauncher location: " launcher
 			.									"`nClient location: " client
 			.									"`n`nPlease make sure locations are correct and try again."
@@ -174,14 +188,15 @@ Return
 #Include Class_GUI_Main.ahk
 #Include Class_INI.ahk
 #Include EasyFuncs.ahk
-#Include ExternalOverlay.ahk
 #Include Exit.ahk
 #Include FileInstall.ahk
 #Include GitHubReleasesAPI.ahk
 #Include Local_File.ahk
 #Include NonSteam_Run.ahk
+#Include NSO_Overlay.ahk
 #Include Reload.ahk
 #Include ShellMessage.ahk
+#Include ShowToolTip.ahk
 #Include SplashText.ahk
 #Include TrayRefresh.ahk
 #Include UpdateCheck.ahk
@@ -189,6 +204,7 @@ Return
 #Include %A_ScriptDir%/lib/third-party
 #Include AddToolTip.ahk
 #Include Download.ahk
+#Include Get_ProcessInfos.ahk
 #Include JSON.ahk
 
 if (A_IsCompiled) {

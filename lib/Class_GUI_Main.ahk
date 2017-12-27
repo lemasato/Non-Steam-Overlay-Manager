@@ -68,7 +68,7 @@ Class GUI_Main {
 		global GUI_Main_Values := {}
 
 		profilesINI := ProgramValues.Profiles_File
-		externalHotkey := INI.Get(ProgramValues.Ini_File, "External_Overlay", "Hotkey")
+		nsoHotkey := INI.Get(ProgramValues.Ini_File, "NSO_Overlay", "Hotkey")
 		steamHotkey := INI.Get(ProgramValues.Ini_File, "Steam_Overlay", "Hotkey")
 
 		allProfiles := INI.Get(profilesINI)
@@ -117,16 +117,16 @@ Class GUI_Main {
 		__f := GUI_Main.BrowseForFile.bind(GUI_Main, "Client", hEDIT_Client)
 		GuiControl, Main:+g,% hBTN_BrowseClient,% __f
 
-		Gui, Main:Add, Checkbox,% "x" profNameCoords.X " y+15 hwndhCB_UseExternalOverlay",Use external overlay
-		useExternalCoords := Control_Coords("Main", hCB_UseExternalOverlay)
-		__f := GUI_Main.ToggleCheckBox.bind(GUI_Main, "UseExternalOverlay", hCB_UseExternalOverlay)
-		GuiControl, Main:+g,% hCB_UseExternalOverlay,% __f
+		Gui, Main:Add, Checkbox,% "x" profNameCoords.X " y+15 hwndhCB_UseNSOOverlay",Use NSO Overlay
+		useNSOCoords := Control_Coords("Main", hCB_UseNSOOverlay)
+		__f := GUI_Main.ToggleCheckBox.bind(GUI_Main, "UseNSOOverlay", hCB_UseNSOOverlay)
+		GuiControl, Main:+g,% hCB_UseNSOOverlay,% __f
 
 		Gui, Main:Add, Text,% "x" profNameCoords.X " y+20 hwndhTEXT_CmdHelp w180",/Profile=""
 
 
 		profBoxCoords := Control_Coords("Main", hGB_ProfileSettings)
-		Gui, Main:Add, GroupBox,% "x" profBoxCoords.X+profBoxCoords.W+5 " y" profBoxCoords.Y " w" profBoxCoords.W " h" profBoxCoords.H " c000000 Center",External Overlay
+		Gui, Main:Add, GroupBox,% "x" profBoxCoords.X+profBoxCoords.W+5 " y" profBoxCoords.Y " w" profBoxCoords.W " h" profBoxCoords.H " c000000 Center",NSO Overlay
 
 		Gui, Main:Add, Text,% "xp+10 yp+25 w" profNameCoords.W " Center BackgroundTrans",Steam Overlay shortcut:
 		Gui, Main:Add, Hotkey,% "xp y+10 wp vvHK_SteamOverlay hwndhHK_SteamOverlay",% steamHotkey
@@ -134,10 +134,10 @@ Class GUI_Main {
 		GuiControl, Main:+g,% hHK_SteamOverlay,% __f
 		; Gui, Main:Add, Checkbox,% "xp y+2 -tab",CTRL
 
-		Gui, Main:Add, Text,% "xp y+15 wp Center BackgroundTrans",External Overlay shortcut:
-		Gui, Main:Add, Hotkey,% "xp y+10 wp vvHK_ExternalOverlay hwndhHK_ExternalOverlay",% externalHotkey
-		__f := GUI_Main.OnHotkeyChange.bind(GUI_Main, "ExternalOverlay", hHK_ExternalOverlay)
-		GuiControl, Main:+g,% hHK_ExternalOverlay,% __f
+		Gui, Main:Add, Text,% "xp y+15 wp Center BackgroundTrans",NSO Overlay shortcut:
+		Gui, Main:Add, Hotkey,% "xp y+10 wp vvHK_NSOOverlay hwndhHK_NSOOverlay",% NSOHotkey
+		__f := GUI_Main.OnHotkeyChange.bind(GUI_Main, "NSOOverlay", hHK_NSOOverlay)
+		GuiControl, Main:+g,% hHK_NSOOverlay,% __f
 
 		coords := Control_Coords("Main", hLV_Profiles)
 		Gui, Main:Add, Button,% "x" coords.X " y" coords.Y+coords.H+5 " w" coords.W/2-2 " h25 hwndhBTN_Add", Add
@@ -152,19 +152,19 @@ Class GUI_Main {
 		AddToolTip(hEDIT_Launcher, "Location of the launcher executable used to run the game."
 		.			 "`nIf you are running the game directly without any launcher, untick the case.")
 		AddToolTip(hEDIT_Client, "Location of the game executable.")
-		AddToolTip(hCB_UseExternalOverlay, "Work-around for games where the Steam Overlay does not normally work.")
+		AddToolTip(hCB_UseNSOOverlay, "Work-around for games where the Steam Overlay does not normally work.")
 		AddToolTip(hHK_SteamOverlay, "Your hotkey used to normally toggle the Steam Overlay."
-		.			"`nIt will be used to automatically enable the Steam Overlay inside the External Overlay."
-		.			"`n`nIf the Steam Overlay does not appear on the External Overlay,"
+		.			"`nIt will be used to automatically enable the Steam Overlay inside the NSO Overlay."
+		.			"`n`nIf the Steam Overlay does not appear on the NSO Overlay,"
 		.			"`n simply press your Steam Overlay shortcut to bring it up.")
-		AddToolTip(hHK_ExternalOverlay, "Hotkey to toggle the External Overlay.")
+		AddToolTip(hHK_NSOOverlay, "Hotkey to toggle the NSO Overlay.")
 
 		; Handles
 		GUI_Main_Handles.EDIT_ProfilName := hEDIT_ProfileName
 		GUI_Main_Handles.EDIT_Launcher := hEDIT_Launcher
 		GUI_Main_Handles.CB_EnableLauncher := hCB_EnableLauncher
 		GUI_Main_Handles.EDIT_Client := hEDIT_Client
-		GUI_Main_Handles.CB_UseExternalOverlay := hCB_UseExternalOverlay
+		GUI_Main_Handles.CB_UseNSOOverlay := hCB_UseNSOOverlay
 
 		GUI_Main_Handles.TEXT_CmdHelp := hTEXT_CmdHelp
 		GUI_Main_Values.TEXT_CmdHelp := "/Profile="
@@ -197,8 +197,8 @@ Class GUI_Main {
 		if content in +,^,!,+^,+!,^!,+^!    ;if the hotkey contains only modifiers, return to wait for a key.
 			return
 
-		if (param = "ExternalOverlay") 
-			INI.Set(iniFile, "External_Overlay", "Hotkey", content)
+		if (param = "NSOOverlay") 
+			INI.Set(iniFile, "NSO_Overlay", "Hotkey", content)
 		else if (param = "SteamOverlay") {
 			INI.Set(iniFile, "Steam_Overlay", "Hotkey", content)
 			Loop 3 {
@@ -230,9 +230,26 @@ Class GUI_Main {
 		}
 	}
 
-	IsProfileValid(profile) {
+	IsSelectedProfileValid(skipKeyCheck=False) {
 		global GUI_Main_Values
+
+		rowID := GUI_Main.LV_GetSelectedRow()
+		rowContent := GUI_Main.LV_GetSelectedContent()
+
+		if GUI_Main.IsProfileValid(rowContent) {
+			Return 1
+		}
+
+	}
+
+	IsProfileValid(profile, skipKeyCheck=False) {
+		global GUI_Main_Values, ProgramValues
 		profilesINI := GUI_Main_Values.Ini_File
+
+		if (skipKeyCheck) {
+			if (profile && profile != "Profiles")
+				return True
+		}
 
 		if (profile && profile != "Profiles") { ; "Profiles" is our collumn name
 			keysAndValues := INI.Get(profilesINI, profile)
@@ -249,10 +266,10 @@ Class GUI_Main {
 		}
 
 		if (exists && !invalidMsg)
-			return 1
+			return True
 		else {
-			invalidMsg := "Profile is invalid.`n" invalidMsg
-			MsgBox % invalidMsg
+			invalidMsg := "Profile """ profile """ is invalid.`n" invalidMsg
+			MsgBox,% 48+4096,% ProgramValues.Name,% invalidMsg
 		}
 	}
 
@@ -261,13 +278,14 @@ Class GUI_Main {
 		global GUI_Main_Values
 		profilesINI := GUI_Main_Values.Ini_File
 
-		GuiControlGet, profName, %A_Gui%:,% GUI_Main_Handles.EDIT_ProfilName
-		if !(profName)
+		if !GUI_Main.IsSelectedProfileValid() {
 			Return
+		}
 
+		profName := GUI_Main.LV_GetSelectedContent()
 		GuiControlGet, state, %A_Gui%:,% CtrlHwnd
-		if (param = "UseExternalOverlay")
-			INI.Set(profilesINI, profName, "Use_External_Overlay", state)
+		if (param = "UseNSOOverlay")
+			INI.Set(profilesINI, profName, "Use_NSO_Overlay", state)
 		else if (param = "EnableLauncher")
 			INI.Set(profilesINI, profName, "Enable_Launcher", state)
 	}
@@ -277,6 +295,9 @@ Class GUI_Main {
 		global GUI_Main_Values
 		profilesINI := GUI_Main_Values.Ini_File
 		profileNameHwnd := GUI_Main_Handles.EDIT_ProfilName
+
+		if !GUI_Main.IsSelectedProfileValid()
+			return
 
 		rowID := GUI_Main.LV_GetSelectedRow()
 		rowContent := GUI_Main.LV_GetSelectedContent(row)
@@ -296,6 +317,10 @@ Class GUI_Main {
 		global GUI_Main_Values
 		static profilesINI
 		profilesINI := GUI_Main_Values.Ini_File
+
+		if !GUI_Main.IsSelectedProfileValid() {
+			Return
+		}
 
 		if (param = "Launcher") {
 			prompt := "Please select the launcher executable"
@@ -323,10 +348,13 @@ Class GUI_Main {
 				INI.Set(profilesINI, userInput, "Launcher", "")
 				INI.Set(profilesINI, userInput, "Client", "")
 				INI.Set(profilesINI, 0, "Enable_Launcher", "")
-				INI.Set(profilesINI, 0, "Use_External_Overlay", "")
+				INI.Set(profilesINI, 0, "Use_NSO_Overlay", "")
 			}
 		}
 		else if (param = "Remove") {
+			if !GUI_Main.IsSelectedProfileValid()
+				return
+
 			profileName := GUI_Main.LV_GetSelectedContent()
 			rowID := GUI_Main.LV_GetSelectedRow()
 
@@ -364,7 +392,7 @@ Class GUI_Main {
 			GuiControl, Main:,% GUI_Main_Handles.EDIT_Launcher,% keysAndValues.Launcher
 			GuiControl, Main:,% GUI_Main_Handles.EDIT_Client,% keysAndValues.Client
 
-			GuiControl, Main:,% GUI_Main_Handles.CB_UseExternalOverlay,% keysAndValues.Use_External_Overlay
+			GuiControl, Main:,% GUI_Main_Handles.CB_UseNSOOverlay,% keysAndValues.Use_NSO_Overlay
 
 			GuiControl, Main:,% GUI_Main_Handles.TEXT_CmdHelp,% GUI_Main_Values.TEXT_CmdHelp """" profileName """"
 		}

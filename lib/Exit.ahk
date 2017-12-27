@@ -5,8 +5,9 @@
 	{
 		ShellMessage_Disable()
 		WinGet, pName, ProcessName, ahk_pid %OVERLAY_PID%
-		if (pName = "ExternalOverlay.exe")
+		if (pName = "NSO Overlay.exe")
 			Process, Close, %OVERLAY_PID%
+		Process, Close, NSO Overlay.exe
 		ExitApp
 	}
 }

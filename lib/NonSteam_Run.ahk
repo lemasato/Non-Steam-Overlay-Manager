@@ -1,12 +1,11 @@
 ﻿NonSteam_Run(launcher, game) {
-	global ProgramValues, EXTERNAL_OVERLAY_ENABLED
-	static gamePID, noLauncherCount, winList, winListBak
+	global ProgramValues, NSO_OVERLAY_ENABLED, AllowedProcessForOverlay, OVERLAY_PID
+	static gamePID, noLauncherCount, launcherPID
 
-	SplitPath, launcher, , launcherDir ; Get launcher folder path
+	SplitPath, launcher, launcherFileName, launcherDir ; Get launcher folder path
 	SplitPath, game, gameFileName, gameDir
 
-	ProgramValues.Game_Executable := gameFileName
-	GroupAdd, GameGroup, ahk_exe %gameFileName%
+	AllowedProcessForOverlay .= "," gameFileName "," launcherFileName
 
 	if (launcher) {
 		GoSub NonSteam_Run_GetExistingInstances
@@ -15,7 +14,6 @@
 		Run,% launcher,% launcherDir, , launcherPID ; Run launcher, using its directory as WorkingDir
 		Menu,Tray,Tip,% ProgramValues.Name "`nWaiting for a new instance to start.`n" game
 
-		WinWait, ahk_exe %gameFileName% ; Wait for the launcher to run the game
 		Loop {
 			Gosub, NonSteam_Run_WaitNewInstance
 			if (gamePID) {
@@ -29,43 +27,61 @@
 		WinWait, ahk_pid %clientPID%
 	}
 
-	if (EXTERNAL_OVERLAY_ENABLED) {
-		externalOverlayHotkey := INI.Get(ProgramValues.Ini_File, "External_Overlay", "Hotkey")
-		Menu,Tray,Tip,% ProgramValues.Name "`nGame is running (PID " gamePID ")`n" game "`n`nExternal Overlay Hotkey: " externalOverlayHotkey
+	if (NSO_OVERLAY_ENABLED) {
+		NSOOverlayHotkey := INI.Get(ProgramValues.Ini_File, "NSO_Overlay", "Hotkey")
+		Menu,Tray,Tip,% ProgramValues.Name "`nGame is running (PID " gamePID ")`n" game "`n`nNSO Overlay Hotkey: " NSOOverlayHotkey
 	}
 	else {
 		Menu,Tray,Tip,% ProgramValues.Name "`nGame is running (PID " gamePID ")`n" game
 	}
+
+	; Make sure Steam and the game are running with same rights.
+	; If the game is elevated but Steam is not, then the GameOverlayUI.exe by steam will be unable to hook in our tool.
+	; Also, if the game is elvated but our tool is not, then the NSO Overlay hotkey won't be working.
+	gameProcessInfos := Get_ProcessInfos(gameFileName, gamePID)
+	steamOverlayProcessInfos := Get_ProcessInfos("Steam.exe")
+
+	isGameElevated := (gameProcessInfos[1]["TokenIsElevated"])?(True):(gameProcessInfos=2)?(True):(False)
+	isSteamOverlayElevated := (steamOverlayProcessInfos[1]["TokenIsElevated"])?(True):(steamOverlayProcessInfos=2)?(True):(False)
+
+	if (NSO_OVERLAY_ENABLED) {
+		nsoOverlayProcessInfos := Get_ProcessInfos("NSO Overlay.exe", OVERLAY_PID)
+		isNSOOverlayElevated := (nsoOverlayProcessInfos[1]["TokenIsElevated"])?(True):(nsoOverlayProcessInfos=2)?(True):(False)
+
+		if (isGameElevated && (!isNSOOverlayElevated || !isSteamOverlayElevated)) {
+			Msgbox,% 48+4096,% ProgramValues.Name,% "The game process (" gameFileName " | " gamePID ") is running as elevated but Steam is not. You may be unable to use the NSO Overlay until you restart Steam with elevated rights."
+		}
+	}
+	else {
+		if (isGameElevated && !isSteamOverlayElevated) {
+			Msgbox,% 48+4096,% ProgramValues.Name,% "The game process (" gameFileName " | " gamePID ") is running as elevated but Steam is not. You may be unable to use the Steam Overlay until you restart Steam with elevated rights."
+		}
+	}
 	
 	WinWaitClose, ahk_exe %gameFileName% ahk_pid %gamePID%
+	Process, Close, NSO Overlay.exe
 	Return
 
 	NonSteam_Run_GetExistingInstances:
-		winList := Get_Windows_List("PID", "EXE", gameFileName)
-		for nothing, _pid in winList {
-			pidList .= _pid ","
-		}
-
-		if (pidList)
-			StringTrimRight, pidList, pidList, 1
+		pidList := Get_Windows_PID(gameFileName, "ahk_exe", ",")
 	Return
 
 	NonSteam_Run_WaitNewInstance:
 		newPidList := ""
 
 		if (noLauncherCount > 10) {
+			launcherCloseElapsed := A_Now
+			EnvSub, launcherCloseElapsed, %launcherCloseTime%, Minutes
+			MsgBox % "The launcher window has been closed for " launcherCloseElapsed " minutes and no new game instance has been detected ever since.`n`n" ProgramValues.Name " will therefore be closing."
 			ExitApp
 		}
-		if !WinExist("ahk_pid " launcherPID)
+		if !WinExist("ahk_pid " launcherPID) {
+			if (!launcherCloseTime)
+				launcherCloseTime := A_Now
 			noLauncherCount++
-
-		winList := Get_Windows_List("PID", "EXE", gameFileName)
-
-		for nothing, _pid in winList {
-			newPidList .= _pid ","
 		}
-		
-		StringTrimRight, newPidList, newPidList, 1
+
+		newPidList := Get_Windows_PID(gameFileName, "ahk_exe", ",")
 
 		if (pidList) {
 			Loop, Parse, newPidList,% ","

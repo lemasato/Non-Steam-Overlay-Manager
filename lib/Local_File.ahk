@@ -45,6 +45,20 @@
 Update_Local_Config() {
 	global ProgramValues
 
+	; Delete ExternalOverlay folder from 0.1 version. Is is now called NSO Overlay
 	if InStr(FileExist(ProgramValues.Resources_Folder "\ExternalOverlay"), "D") 
 		FileRemoveDir,% ProgramValues.Resources_Folder "\ExternalOverlay", 1
+
+	; Rename External_Overlay ini entries to NSO_Overlay
+	INI.Rename(ProgramValues.Ini_File, "External_Overlay", , "NSO_Overlay")
+	sects := INI.Get(ProgramValues.Profiles_File)
+
+	Loop, Parse,% sects, "`n"
+	{
+		nsoValue := INI.Get(ProgramValues.Profiles_File, A_LoopField, "Use_NSO_Overlay")
+		if (nsoValue=1 || nsoValue=0)
+			INI.Remove(ProgramValues.Profiles_File, A_LoopField, "Use_External_Overlay")
+		else
+			INI.Rename(ProgramValues.Profiles_File, A_LoopField, "Use_External_Overlay", A_LoopField, "Use_NSO_Overlay")
+	}
 }
