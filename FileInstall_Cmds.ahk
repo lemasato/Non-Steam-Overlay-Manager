@@ -22,6 +22,23 @@ global ProgramValues
 if !InStr(FileExist(ProgramValues.Resources_Folder ""), "D")
 	FileCreateDir,% ProgramValues.Resources_Folder ""
 
+FileGetSize, sourceFileSize, resources\changelog.txt
+if (A_IsCompiled)
+	destFileSize := Get_ResourceSize("resources\changelog.txt", ProgramValues.Resources_Folder "\changelog.txt")
+else FileGetSize, destFileSize, % ProgramValues.Resources_Folder "\changelog.txt"
+
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\changelog.txt, % ProgramValues.Resources_Folder "\changelog.txt", 1
+if (ErrorLevel)
+	Msgbox % "Failed to extract file!"
+	. "`nSource: resources\changelog.txt"
+	. "`nDest: " ProgramValues.Resources_Folder "\changelog.txt"
+	. "`nFlag: 2"
+
+; ----------------------------
+if !InStr(FileExist(ProgramValues.Resources_Folder ""), "D")
+	FileCreateDir,% ProgramValues.Resources_Folder ""
+
 FileGetSize, sourceFileSize, resources\icon.ico
 if (A_IsCompiled)
 	destFileSize := Get_ResourceSize("resources\icon.ico", ProgramValues.Resources_Folder "\icon.ico")
