@@ -18,7 +18,7 @@ To add another game, the steps from 3-6.
 
 ### Does it really work for any game?  
 It does. As long as your game is not running in fullscreen (borderless is fine).  
-You simply need to tick the "Use External Overlay" checkbox.  
+You simply need to tick the "Use NSO Overlay" checkbox.  
 
-Once in game, press your "External Overlay shortcut" hotkey to bring it up.  
-If the window is black (without the Steam Overlay showing up), that means that you either did not provide the right shortcut that you normally use to toggle the Steam Overlay or that the tool failed to correctly send the inputs to the External Overlay. To fix it, simply press the keys you normally use to toggle the Steam Overlay (Shift+Tab by default).
+Once in game, press your "NSO Overlay shortcut" hotkey to bring it up.  
+If the window is black (without the Steam Overlay showing up), that means that you either did not provide the right shortcut that you normally use to toggle the Steam Overlay or that the tool failed to correctly send the inputs to the NSO Overlay. To fix it, simply press the keys you normally use to toggle the Steam Overlay (Shift+Tab by default).
