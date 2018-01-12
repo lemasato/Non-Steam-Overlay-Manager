@@ -1,4 +1,52 @@
-﻿Get_Windows_Title(_filter="", _filterType="", _delimiter="`n") {
+﻿Set_Format(_NumberType="", _Format="") {
+	static prevNumberType, prevFormat
+	prevNumberType := _NumberType
+	prevFormat := A_FormatFloat
+
+	if (_NumberType = "") && (_Format = "")
+		SetFormat, %prevNumberType%, %prevFormat%
+	else if (_NumberType) && (_Format = "")
+		SetFormat, %_NumberType%, %prevFormat%
+	else
+		SetFormat, %_NumberType%, %_Format%
+}
+
+Set_TitleMatchMode(_MatchMode="") {
+	static prevMode
+	prevMode := A_TitleMatchMode
+
+	if !(_MatchMode)
+		SetTitleMatchMode, %prevMode%
+	else
+		SetTitleMatchMode, %_MatchMode%
+}
+
+MsgBox(_opts="", _title="", _text="", _timeout="") {
+	global PROGRAM
+
+	if (_title = "")
+		_title := PROGRAM.NAME
+
+	MsgBox,% _opts,% _title,% _text,% _timeout
+}
+
+Detect_HiddenWindows(state="") {
+	static previousState
+	if (state = "" && previousState) {
+		DetectHiddenWindows, %previousState%
+		Return
+	}
+
+	previousState := A_DetectHiddenWindows
+
+
+	state := (state=True || state="On")?("On"):(state=False || state="Off")?("Off"):("ERROR")
+	if (state = "ERROR")
+		MsgBox(,, "Invalid use of " A_ThisFunc)
+	DetectHiddenWindows, %state%
+}
+
+Get_Windows_Title(_filter="", _filterType="", _delimiter="`n") {
 	returnList := Get_Windows_List(_filter, _filterType, _delimiter, "Title")
 	return returnList
 }
@@ -141,7 +189,7 @@ IsNum(str) {
 	return false
 }
 
-Get_Control_Coords(guiName, ctrlHandler) {
+Get_ControlCoords(guiName, ctrlHandler) {
 /*		Retrieve a control's position and return them in an array.
 		The reason of this function is because the variable content would be blank
 			unless its sub-variables (coordsX, coordsY, ...) were set to global.
@@ -161,7 +209,7 @@ StringContains(string, match) {
 		return true
 }
 
-Get_Text_Control_Size(txt, fontName, fontSize, maxWidth="") {
+Get_TextCtrlSize(txt, fontName, fontSize, maxWidth="") {
 /*		Create a control with the specified text to retrieve
  *		the space (width/height) it would normally take
 */
@@ -171,8 +219,7 @@ Get_Text_Control_Size(txt, fontName, fontSize, maxWidth="") {
 		Gui, GetTextSize:Add, Text,x0 y0 +Wrap w%maxWidth% hwndTxtHandler,% txt
 	else 
 		Gui, GetTextSize:Add, Text,x0 y0 hwndTxtHandler,% txt
-	coords := Get_Control_Coords("GetTextSize", TxtHandler)
-	; Gui, GetTextSize:Show, w500
+	coords := Get_ControlCoords("GetTextSize", TxtHandler)
 	Gui, GetTextSize:Destroy
 
 	return coords
@@ -181,10 +228,10 @@ Get_Text_Control_Size(txt, fontName, fontSize, maxWidth="") {
 
 	Gui, GetTextSize:Font, S%fontSize%,% fontName
 	Gui, GetTextsize:Add, Text,x0 y0 hwndTxtHandlerAutoSize,% txt
-	coordsAuto := Get_Control_Coords("GetTextSize", TxtHandlerAutoSize)
+	coordsAuto := Get_ControlCoords("GetTextSize", TxtHandlerAutoSize)
 	if (maxWidth) {
 		Gui, GetTextSize:Add, Text,x0 y0 +Wrap w%maxWidth% hwndTxtHandlerFixedSize,% txt
-		coordsFixed := Get_Control_Coords("GetTextSize", TxtHandlerFixedSize)
+		coordsFixed := Get_ControlCoords("GetTextSize", TxtHandlerFixedSize)
 	}
 	Gui, GetTextSize:Destroy
 
