@@ -148,7 +148,10 @@ Start_Script() {
 
 		global NSO_OVERLAY_ENABLED := useNSOOverlay
 
-		if (client && launcher) && FileExist(client) && FileExist(launcher) { ; Profile exists and is valid
+		clientExists := FileExist(client)
+		launcherExists := FileExist(launcher)
+
+		if (client && launcher && enableLauncher && clientExists && launcherExists) || (client && !enableLauncher && clientExists) { ; Profile exists and is valid
 			Menu,Tray,Tip,% ProgramValues.Name "`nProfile: " PARAM_PROFILE
 
 			if (useNSOOverlay) {
