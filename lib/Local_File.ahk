@@ -8,7 +8,7 @@
 	sect := "PROGRAM"
 	keysAndValues := {	Last_Update_Check:"1994042612310000"
 						,FileName:A_ScriptName
-						,PID:ProgramValues.PID}
+						,PID:ProgramValues.PID
 						,Version:ProgramValues.Version}
 
 	for iniKey, iniValue in keysAndValues {
