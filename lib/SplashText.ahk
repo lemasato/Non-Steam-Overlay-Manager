@@ -27,7 +27,7 @@ SplashTextOn(title, msg, waitForClose=false, useSpaceToClose=false) {
 	Gui, Splash:Font, S10 cBlack, Segoe UI
 
 	Gui, Splash:Add, Text, Center hwndhMSG,% msg
-	coords := Get_Control_Coords("Splash", hMSG)
+	coords := Get_ControlCoords("Splash", hMSG)
 	w := coords.W, h := coords.H
 	GuiControl, Splash:Move,% hMSG,% "x5 w" coords.W " h" coords.H
 
