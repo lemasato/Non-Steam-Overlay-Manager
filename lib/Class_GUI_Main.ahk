@@ -236,7 +236,7 @@ Class GUI_Main {
 		rowID := GUI_Main.LV_GetSelectedRow()
 		rowContent := GUI_Main.LV_GetSelectedContent()
 
-		if GUI_Main.IsProfileValid(rowContent) {
+		if GUI_Main.IsProfileValid(rowContent, skipKeyCheck) {
 			Return 1
 		}
 
@@ -246,8 +246,8 @@ Class GUI_Main {
 		global GUI_Main_Values, ProgramValues
 		profilesINI := GUI_Main_Values.Ini_File
 
-		if (skipKeyCheck) {
-			if (profile && profile != "Profiles")
+		if (skipKeyCheck) { ; Use skipKeyCheck to only check for profile name
+			if (profile != "" && profile != "Profiles")
 				return True
 		}
 
@@ -278,7 +278,7 @@ Class GUI_Main {
 		global GUI_Main_Values
 		profilesINI := GUI_Main_Values.Ini_File
 
-		if !GUI_Main.IsSelectedProfileValid() {
+		if !GUI_Main.IsSelectedProfileValid(True) {
 			Return
 		}
 
@@ -296,7 +296,7 @@ Class GUI_Main {
 		profilesINI := GUI_Main_Values.Ini_File
 		profileNameHwnd := GUI_Main_Handles.EDIT_ProfilName
 
-		if !GUI_Main.IsSelectedProfileValid()
+		if !GUI_Main.IsSelectedProfileValid(True)
 			return
 
 		rowID := GUI_Main.LV_GetSelectedRow()
@@ -318,7 +318,7 @@ Class GUI_Main {
 		static profilesINI
 		profilesINI := GUI_Main_Values.Ini_File
 
-		if !GUI_Main.IsSelectedProfileValid() {
+		if !GUI_Main.IsSelectedProfileValid(True) {
 			Return
 		}
 
@@ -347,12 +347,12 @@ Class GUI_Main {
 				LV_Add("", userInput)
 				INI.Set(profilesINI, userInput, "Launcher", "")
 				INI.Set(profilesINI, userInput, "Client", "")
-				INI.Set(profilesINI, 0, "Enable_Launcher", "")
-				INI.Set(profilesINI, 0, "Use_NSO_Overlay", "")
+				INI.Set(profilesINI, userInput, "Enable_Launcher", False)
+				INI.Set(profilesINI, userInput, "Use_NSO_Overlay", False)
 			}
 		}
 		else if (param = "Remove") {
-			if !GUI_Main.IsSelectedProfileValid()
+			if !GUI_Main.IsSelectedProfileValid(True)
 				return
 
 			profileName := GUI_Main.LV_GetSelectedContent()
@@ -392,7 +392,9 @@ Class GUI_Main {
 			GuiControl, Main:,% GUI_Main_Handles.EDIT_Launcher,% keysAndValues.Launcher
 			GuiControl, Main:,% GUI_Main_Handles.EDIT_Client,% keysAndValues.Client
 
-			GuiControl, Main:,% GUI_Main_Handles.CB_UseNSOOverlay,% keysAndValues.Use_NSO_Overlay
+			if (keysAndValues.Use_NSO_Overlay && keysAndValues.Use_NSO_Overlay != "ERROR")
+				GuiControl, Main:,% GUI_Main_Handles.CB_UseNSOOverlay, 1
+			else GuiControl, Main:,% GUI_Main_Handles.CB_UseNSOOverlay, 0
 
 			GuiControl, Main:,% GUI_Main_Handles.TEXT_CmdHelp,% GUI_Main_Values.TEXT_CmdHelp """" profileName """"
 		}
