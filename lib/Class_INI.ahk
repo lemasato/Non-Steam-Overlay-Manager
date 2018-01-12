@@ -1,6 +1,6 @@
 ﻿Class INI {
 
-	Get(file, sect="", key="") {
+	Get(file, sect="", key="", defaultVal="") {
 
 		if (!sect) {
 			IniRead, allSections,% file
@@ -8,7 +8,9 @@
 		}
 
 		if (sect && key) {
-			IniRead, val,% file,% sect,% key
+			if (defaultVal != "")
+				IniRead, val,% file,% sect,% key,% defaultVal
+			else IniRead, val,% file,% sect,% key
 			if (val && val != "ERROR") || (val = 0)
 				Return val
 			else Return "ERROR"
