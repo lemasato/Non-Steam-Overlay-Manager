@@ -1,4 +1,12 @@
 -----------------------
+v0.2.1 (12 Jan 2018)
+	Fixes:
+	- The "profile invalid" message box would appear at all times, making the user unable to modify profiles.
+	- A profile named "0" would always be created upon creating a new profile.
+	If you had the "0" profile, it will automatically be deleted.
+	- Users would be unable to run a profile which had the "Launcher" setting disabled.
+
+-----------------------
 v0.2 (27 Dec 2017)
 	Features:
 	- A warning box will appear if your game is running elevated while Steam is not.
