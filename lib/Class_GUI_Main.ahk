@@ -230,34 +230,41 @@ Class GUI_Main {
 		}
 	}
 
-	IsSelectedProfileValid(skipKeyCheck=False) {
+	IsSelectedProfileNameValid() {
+		if GUI_Main.IsSelectedProfileValid(True, True)
+			Return 1
+	}
+
+	IsSelectedProfileValid(skipLauncher=False, skipClient=False) {
 		global GUI_Main_Values
 
 		rowID := GUI_Main.LV_GetSelectedRow()
 		rowContent := GUI_Main.LV_GetSelectedContent()
 
-		if GUI_Main.IsProfileValid(rowContent, skipKeyCheck) {
+		if GUI_Main.IsProfileValid(rowContent, skipLauncher, skipClient) {
 			Return 1
 		}
-
 	}
 
-	IsProfileValid(profile, skipKeyCheck=False) {
+	IsProfileValid(profile, skipLauncher=False, skipClient=False) {
 		global GUI_Main_Values, ProgramValues
 		profilesINI := GUI_Main_Values.Ini_File
 
-		if (skipKeyCheck) { ; Use skipKeyCheck to only check for profile name
+		if (skipLauncher && skipClient) { ; Use skipKeyCheck to only check for profile name
 			if (profile != "" && profile != "Profiles")
 				return True
 		}
 
 		if (profile && profile != "Profiles") { ; "Profiles" is our collumn name
 			keysAndValues := INI.Get(profilesINI, profile)
+			skipLauncher := (keysAndValues.Enable_Launcher)?(False):(True)
+
 			for key, value in keysAndValues {
 				exists := true
-				if (key = "Client" || key = "Launcher") && !FileExist(value) {
+				if (key = "Launcher" && !skipLauncher && !FileExist(value))
 					invalidMsg .= "Path for " key " does not exist: " value "`n"
-				}
+				else if  (key = "Client" && !skipClient && !FileExist(value))
+					invalidMsg .= "Path for " key " does not exist: " value "`n"
 			}
 
 			if !(exists) {
@@ -278,7 +285,7 @@ Class GUI_Main {
 		global GUI_Main_Values
 		profilesINI := GUI_Main_Values.Ini_File
 
-		if !GUI_Main.IsSelectedProfileValid(True) {
+		if !GUI_Main.IsSelectedProfileNameValid() {
 			Return
 		}
 
@@ -296,20 +303,16 @@ Class GUI_Main {
 		profilesINI := GUI_Main_Values.Ini_File
 		profileNameHwnd := GUI_Main_Handles.EDIT_ProfilName
 
-		if !GUI_Main.IsSelectedProfileValid(True)
-			return
-
 		rowID := GUI_Main.LV_GetSelectedRow()
 		rowContent := GUI_Main.LV_GetSelectedContent(row)
-
 		GuiControlGet, newContent,%A_Gui%:,% profileNameHwnd
 
-		if (rowContent && newContent) && (newContent != rowContent) {
-			if GUI_Main.IsProfileValid(rowContent) {
+		if !GUI_Main.IsProfileValid(rowContent)
+			Return
 
-				INI.Rename(profilesINI, rowContent, , newContent)
-				LV_Modify(rowID, , newContent)
-			}
+		if (rowContent && newContent) && (newContent != rowContent) {
+			INI.Rename(profilesINI, rowContent, , newContent)
+			LV_Modify(rowID, , newContent)
 		}
 	}
 
@@ -318,7 +321,7 @@ Class GUI_Main {
 		static profilesINI
 		profilesINI := GUI_Main_Values.Ini_File
 
-		if !GUI_Main.IsSelectedProfileValid(True) {
+		if !GUI_Main.IsSelectedProfileNameValid() {
 			Return
 		}
 
@@ -352,7 +355,7 @@ Class GUI_Main {
 			}
 		}
 		else if (param = "Remove") {
-			if !GUI_Main.IsSelectedProfileValid(True)
+			if !GUI_Main.IsSelectedProfileNameValid()
 				return
 
 			profileName := GUI_Main.LV_GetSelectedContent()
