@@ -23,7 +23,7 @@
 		}
 	}
 	else {
-		Run,% %gameFileName%,% gameDir, , gamePID
+		Run,% gameFileName,% gameDir, , gamePID
 		WinWait, ahk_pid %clientPID%
 	}
 
