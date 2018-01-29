@@ -1,4 +1,21 @@
 -----------------------
+v0.2.2 (29 Jan 2018)
+	Improvements:
+	- Minor GUI changes.
+	
+	Features:
+	- Added launch parameters.
+	These are only applied to the file launched by NSO Manager.
+	If, for example, you are using a game that has a launcher, the parameters will only be applied to the game launcher executable.
+	- Added compatibility for shortcut (lnk) files.
+	
+	Changes:
+	- Added links to Github and Discord on the GUI.
+	
+	Fixes:
+	- When not using a launcher, NSO Manager would instantly exit after running the client executable.
+
+-----------------------
 v0.2.1 (12 Jan 2018)
 	Fixes:
 	- The "profile invalid" message box would appear at all times, making the user unable to modify profiles.
