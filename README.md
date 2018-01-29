@@ -4,7 +4,7 @@ Use the Steam Overlay in **any** game.
 *The interface for this tool is still in development.*  
 *Main core features are already available.*  
 
-https://discord.gg/7B9XgCY
+https://discord.gg/UMxqtfC  
 
 ### How do I use it?  
 1. Head to the [releases](https://github.com/lemasato/Non-Steam-Overlay-Manager/releases) tab to download the latest NSO-Manager.exe.  
@@ -17,8 +17,27 @@ https://discord.gg/7B9XgCY
 To add another game, the steps from 3-6.  
 
 ### Does it really work for any game?  
-It does. As long as your game is not running in fullscreen (borderless is fine).  
-You simply need to tick the "Use NSO Overlay" checkbox.  
+It does.  
+Even though some games do not allowed Steam to hook their overlay to their process, we can still work around it by hooking the Steam overlay to an external process: NSO Overlay.  
+The NSO Overlay is entirely safe to use, as it was made using Unity Engine.
 
-Once in game, press your "NSO Overlay shortcut" hotkey to bring it up.  
-If the window is black (without the Steam Overlay showing up), that means that you either did not provide the right shortcut that you normally use to toggle the Steam Overlay or that the tool failed to correctly send the inputs to the NSO Overlay. To fix it, simply press the keys you normally use to toggle the Steam Overlay (Shift+Tab by default).
+As I will be repeating similar terms multiple times, I will try to make it clear and avoid confusion:  
+"Steam Overlay" - This is the Overlay used by Steam. The one which allows you to speak with your friends and use its integrated browser.  
+"Steam Overlay shortcut" - This is the key combination you normally press to toggle your Steam Overlay.  
+"NSO Overlay" - This is our external application that can be used when your game does not allow overlays to be hooked.  
+"NSO Overlay shortcut" - This is the key combination you will be using to toggle the external overlay provided by our tool.  
+When the NSO Overlay is enabled, we run our own external application with the Steam Overlay hooked on it.  
+Once the NSO Overlay is running, we send your Steam Overlay shortcut to its window, so that the Steam Overlay is automatically toggled on when you toggle on the NSO Overlay.  
+
+### How do I enable the NSO Overlay?  
+First, make sure that your game is running Windowed or Borderless.  
+
+To enable the NSO Overlay:  
+1. Enable the "Use NSO Overlay" setting.  
+1. Set the hotkey you normally use to toggle the Steam Overlay.  
+1. Set another hotkey you will be using to toggle the NSO Overlay.  
+This hotkey has to be different than the one used for Steam.  
+1. Once in-game, press your NSO Overlay hotkey.  
+The screen will fade to black, and you should now be able to see the Steam Overlay.  
+If you cannot see the Steam Overlay, simply press your "Steam Overlay" hotkey.  
+If for some reason it still doesn't work, try running Steam with elevated (admin) rights to avoid any issue.  
