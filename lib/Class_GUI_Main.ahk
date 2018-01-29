@@ -368,7 +368,7 @@ Class GUI_Main {
 		else if (param = "Client") {
 			prompt := "Please select the client executable"
 		}
-		FileSelectFile, selectedFile, 3, ,% prompt
+		FileSelectFile, selectedFile,% 1+2+32, ,% prompt, Executables (*.exe; *.lnk) ; 1=file exists, 2=path exists, 3=lnk file not resolved to target
 		if (!ErrorLevel) {
 			GuiControl, Main:,% EditHwnd,% selectedFile
 			profileName := GUI_Main.LV_GetSelectedContent()

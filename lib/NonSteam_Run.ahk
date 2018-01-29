@@ -1,16 +1,29 @@
-﻿NonSteam_Run(launcher, game, launchParams) {
+﻿NonSteam_Run(_launcher, _game, launchParams) {
 	global ProgramValues, NSO_OVERLAY_ENABLED, AllowedProcessForOverlay, OVERLAY_PID
 	static gamePID, noLauncherCount, launcherPID
 
-	SplitPath, launcher, launcherFileName, launcherDir ; Get launcher folder path
-	SplitPath, game, gameFileName, gameDir
+	SplitPath, _launcher, launcherFileName, launcherDir, launcherFileExt ; Get launcher folder path
+	SplitPath, _game, gameFileName, gameDir, gameFileExt
+	launcher := _launcher, game := _game
+
+	if (launcherFileExt = "lnk") {
+		FileGetShortcut,% _launcher, launcher, launcherDir, launcherLaunchParams
+		SplitPath, launcher, launcherFileName
+		if (launcherLaunchParams)
+			launcher := launcher " " launcherLaunchParams
+	}
+	if (gameFileExt = "lnk") {
+		FileGetShortcut,% _game, game, gameDir, gameLaunchParams
+		SplitPath, game, gameFileName
+		if (gameLaunchParams)
+			game := game " " gameLaunchParams
+	}
 
 	AllowedProcessForOverlay .= "," gameFileName "," launcherFileName
 
 	if (launcher) {
 		GoSub NonSteam_Run_GetExistingInstances
 
-		SplitPath, launcher, , launcherDir ; Get launcher folder path
 		Run,% launcher " " launchParams,% launcherDir, launcherPID ; Run launcher, using its directory as WorkingDir
 		Menu,Tray,Tip,% ProgramValues.Name "`nWaiting for a new instance to start.`n" game
 
@@ -23,7 +36,7 @@
 		}
 	}
 	else {
-		Run,% gameFileName " " launchParams,% gameDir, , gamePID
+		Run,% game " " launchParams,% gameDir, , gamePID
 		WinWait, ahk_pid %gamePID%
 	}
 
