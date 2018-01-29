@@ -53,6 +53,23 @@ if (ErrorLevel)
 	. "`nFlag: 2"
 
 ; ----------------------------
+if !InStr(FileExist(ProgramValues.Resources_Folder ""), "D")
+	FileCreateDir,% ProgramValues.Resources_Folder ""
+
+FileGetSize, sourceFileSize, resources\version.txt
+if (A_IsCompiled)
+	destFileSize := Get_ResourceSize("resources\version.txt", ProgramValues.Resources_Folder "\version.txt")
+else FileGetSize, destFileSize, % ProgramValues.Resources_Folder "\version.txt"
+
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\version.txt, % ProgramValues.Resources_Folder "\version.txt", 1
+if (ErrorLevel)
+	Msgbox % "Failed to extract file!"
+	. "`nSource: resources\version.txt"
+	. "`nDest: " ProgramValues.Resources_Folder "\version.txt"
+	. "`nFlag: 2"
+
+; ----------------------------
 if !InStr(FileExist(ProgramValues.Resources_Folder "\NSO Overlay"), "D")
 	FileCreateDir,% ProgramValues.Resources_Folder "\NSO Overlay"
 
