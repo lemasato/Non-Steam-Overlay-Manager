@@ -1,19 +1,22 @@
 -----------------------
-v0.2.2 (29 Jan 2018)
+v0.2.3 (29 Jan 2018)
 	Improvements:
 	- Minor GUI changes.
+	- Improved the way the Steam Overlay shortcut "key-combination string" is sent to the NSO Overlay window.
 	
 	Features:
 	- Added launch parameters.
 	These are only applied to the file launched by NSO Manager.
 	If, for example, you are using a game that has a launcher, the parameters will only be applied to the game launcher executable.
 	- Added compatibility for shortcut (lnk) files.
+	- Pressing the ESC key while on the NSO Overlay will toggle it off.
 	
 	Changes:
 	- Added links to Github and Discord on the GUI.
 	
 	Fixes:
 	- When not using a launcher, NSO Manager would instantly exit after running the client executable.
+	- F1 would be forced as the hotkey to toggle the NSO Overlay.
 
 -----------------------
 v0.2.1 (12 Jan 2018)
