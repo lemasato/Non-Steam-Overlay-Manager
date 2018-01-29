@@ -1,4 +1,4 @@
-﻿NonSteam_Run(launcher, game) {
+﻿NonSteam_Run(launcher, game, launchParams) {
 	global ProgramValues, NSO_OVERLAY_ENABLED, AllowedProcessForOverlay, OVERLAY_PID
 	static gamePID, noLauncherCount, launcherPID
 
@@ -11,7 +11,7 @@
 		GoSub NonSteam_Run_GetExistingInstances
 
 		SplitPath, launcher, , launcherDir ; Get launcher folder path
-		Run,% launcher,% launcherDir, , launcherPID ; Run launcher, using its directory as WorkingDir
+		Run,% launcher " " launchParams,% launcherDir, launcherPID ; Run launcher, using its directory as WorkingDir
 		Menu,Tray,Tip,% ProgramValues.Name "`nWaiting for a new instance to start.`n" game
 
 		Loop {
@@ -23,8 +23,8 @@
 		}
 	}
 	else {
-		Run,% gameFileName,% gameDir, , gamePID
-		WinWait, ahk_pid %clientPID%
+		Run,% gameFileName " " launchParams,% gameDir, , gamePID
+		WinWait, ahk_pid %gamePID%
 	}
 
 	if (NSO_OVERLAY_ENABLED) {
@@ -58,7 +58,7 @@
 		}
 	}
 	
-	WinWaitClose, ahk_exe %gameFileName% ahk_pid %gamePID%
+	Process, WaitClose,% gamePID
 	Process, Close, NSO Overlay.exe
 	Return
 

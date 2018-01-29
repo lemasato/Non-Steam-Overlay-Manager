@@ -54,6 +54,16 @@ Update_Local_Config() {
 	subVersions := StrSplit(priorVerNum, ".")
 	mainVer := subVersions[1], releaseVer := subVersions[2], patchVer := subVersions[3]
 
+	if (mainVer = 0 && releaseVer = "2") {
+		sects := INI.Get(profilesFile)
+		Loop, Parse,% sects,`n,`r
+		{
+			value := Ini.Get(profilesFile, A_LoopField, "Launch_Parameters")
+			if (value = "ERROR")
+				Ini.Set(profilesFile, A_LoopField, "Launch_Parameters", A_Space)
+		}
+	}
+
 	; Bug from 0.2: Remove the "0" section that was created when it shouldn't have been
 	Ini.Remove(profilesFile, "0")
 
@@ -65,7 +75,7 @@ Update_Local_Config() {
 	INI.Rename(iniFile, "External_Overlay", , "NSO_Overlay")
 	sects := INI.Get(profilesFile)
 
-	Loop, Parse,% sects, "`n"
+	Loop, Parse,% sects,`n,`r
 	{
 		nsoValue := INI.Get(profilesFile, A_LoopField, "Use_NSO_Overlay")
 		if (nsoValue=1 || nsoValue=0)

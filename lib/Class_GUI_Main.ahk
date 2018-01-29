@@ -79,14 +79,14 @@ Class GUI_Main {
 		Gui, Main:Font, S8, Segoe UI
 		Gui, Main:Default ; Neccessary for LV_ functions
 
-		Gui, Main:Add, GroupBox, x5 y0 c000000 w565 R5,Instructions
-		Gui, Main:Add, Text, xp+15 yp+20 BackgroundTrans,% "1) Add this tool as a non-steam game"
+		Gui, Main:Add, GroupBox, x5 y0 c000000 w675 h135,Instructions
+		Gui, Main:Add, Text, x15 yp+20 BackgroundTrans,% "1) Add this tool as a non-steam game"
 		.												 "`n2) Right click on it on your library."
 		.												 "`n3) Choose Properties > Set launch options."
-		.												 "`n4) Write: /Profile=""""Profile Name"""""
+		.												 "`n4) Write: /Profile=""Profile Name"""
 		.												 "`n`nKeep your mouse above a control for a tooltip."
-
-		Gui, Main:Add, ListView, x5 y+25 w150 h270 hwndhLV_Profiles -HDR -Multi -E0x200 AltSubmit +LV0x10000,Profiles
+		.												 "`n`nUntick the box next to ""Launcher"" if you wish to use NSO Manager with a software or a game that doesnt use a launcher."
+		Gui, Main:Add, ListView, x5 y+25 w150 h250 hwndhLV_Profiles -HDR -Multi -E0x200 AltSubmit +LV0x10000,Profiles
 		__f := GUI_Main.OnProfilesLVClick.bind(GUI_Main)
 		GuiControl, Main:+g,% hLV_Profiles, % __f
 		;__ Loop through profiles names
@@ -94,48 +94,57 @@ Class GUI_Main {
 		{
 			LV_Add("", A_LoopField)
 		}
-		Gui, Main:Add, GroupBox, x+10 w200 h300 c000000 hwndhGB_ProfileSettings Center,Profile Settings
-		Gui, Main:Add, Text, xp+10 yp+32 Center wp-20 hwndhTEXT_ProfileName,Name:
+		Gui, Main:Add, GroupBox, x+10 w510 h280 c000000 hwndhGB_ProfileSettings Center,Profile Settings
+		Gui, Main:Add, Text, xp+10 yp+22 Center w200 hwndhTEXT_ProfileName,Profile name
 		profNameCoords := Control_Coords("Main", hTEXT_ProfileName)
 		Gui, Main:Add, Edit, xp y+5 wp-21 hwndhEDIT_ProfileName
-		Gui, Main:Add, Button, x+0 yp-1 w23 h23 hwndhBTN_SaveProfileName, S
+		Gui, Main:Add, Button, x+1 yp-1 w80 h23 hwndhBTN_RenameProfileName, Rename
 		__f := GUI_Main.ChangeProfileName.bind(GUI_Main)
-		GuiControl, Main:+g,% hBTN_SaveProfileName,% __f
+		GuiControl, Main:+g,% hBTN_RenameProfileName,% __f
 
-		Gui, Main:Add, Text,% "x" profNameCoords.X " y+10 w" profNameCoords.W " Center",Launcher location
+		Gui, Main:Add, Text,% "x" profNameCoords.X " y+10 w" profNameCoords.W " Center hwndhTEXT_ProfileLauncher",Launcher location
+		profLauncherCoords := Control_Coords("Main", hTEXT_ProfileLauncher)
 		Gui, Main:Add, CheckBox, xp y+8 hwndhCB_EnableLauncher,% ""
 		__f := GUI_Main.ToggleCheckBox.bind(GUI_Main, "EnableLauncher", hCB_EnableLauncher)
 		GuiControl, Main:+g,% hCB_EnableLauncher,% __f
-		Gui, Main:Add, Edit,% "xp+20 yp-3 w" profNameCoords.W-21-20 " ReadOnly hwndhEDIT_Launcher"
-		Gui, Main:Add, Button,% "x+0 yp-1 w23 h23 hwndhBTN_BrowseLauncher",O
+		Gui, Main:Add, Edit,% "xp+20 yp-3 w" profLauncherCoords.W-40 " ReadOnly hwndhEDIT_Launcher"
+		profLauncherEditCoords := Control_Coords("Main", hEDIT_Launcher)
+		Gui, Main:Add, Button,% "x+1 yp-1 w80 h23 hwndhBTN_BrowseLauncher", Browse
 		__f := GUI_Main.BrowseForFile.bind(GUI_Main, "Launcher", hEDIT_Launcher)
 		GuiControl, Main:+g,% hBTN_BrowseLauncher,% __f
 
-		Gui, Main:Add, Text,% "x" profNameCoords.X " y+10 w" profNameCoords.W " Center",Client location
-		Gui, Main:Add, Edit, xp y+5 wp-21 ReadOnly hwndhEDIT_Client
-		Gui, Main:Add, Button,% "x+0 yp-1 w23 h23 hwndhBTN_BrowseClient",O
+		Gui, Main:Add, Text,% "x" profNameCoords.X " y+10 w" profNameCoords.W " Center hwndhTEXT_ProfileClient",Client location
+		Gui, Main:Add, Edit, xp y+5 wp-20 ReadOnly hwndhEDIT_Client 
+		Gui, Main:Add, Button,% "x+1 yp-1 w80 h23 hwndhBTN_BrowseClient", Browse
 		__f := GUI_Main.BrowseForFile.bind(GUI_Main, "Client", hEDIT_Client)
 		GuiControl, Main:+g,% hBTN_BrowseClient,% __f
 
-		Gui, Main:Add, Checkbox,% "x" profNameCoords.X " y+15 hwndhCB_UseNSOOverlay",Use NSO Overlay
-		useNSOCoords := Control_Coords("Main", hCB_UseNSOOverlay)
-		__f := GUI_Main.ToggleCheckBox.bind(GUI_Main, "UseNSOOverlay", hCB_UseNSOOverlay)
-		GuiControl, Main:+g,% hCB_UseNSOOverlay,% __f
+		Gui, Main:Add, Text,% "x" profNameCoords.X " y+10 w" profNameCoords.W+60 " Center hwndhTEXT_ProfileParameters",Launch parameters
+		Gui, Main:Add, Edit, xp y+5 wp hwndhEDIT_LaunchParameters
+		__f := GUI_Main.SetLaunchParameters.bind(GUI_Main, hEDIT_LaunchParameters)
+		GuiControl, Main:+g,% hEDIT_LaunchParameters,% __f
 
 		Gui, Main:Add, Text,% "x" profNameCoords.X " y+20 hwndhTEXT_CmdHelp w180",/Profile=""
 
 
-		profBoxCoords := Control_Coords("Main", hGB_ProfileSettings)
-		Gui, Main:Add, GroupBox,% "x" profBoxCoords.X+profBoxCoords.W+5 " y" profBoxCoords.Y " w" profBoxCoords.W " h" profBoxCoords.H " c000000 Center",NSO Overlay
 
-		Gui, Main:Add, Text,% "xp+10 yp+25 w" profNameCoords.W " Center BackgroundTrans",Steam Overlay shortcut:
-		Gui, Main:Add, Hotkey,% "xp y+10 wp vvHK_SteamOverlay hwndhHK_SteamOverlay",% steamHotkey
+		secondRowX := profNameCoords.X+290, secondRowY := profNameCoords.Y+20
+
+		Gui, Main:Add, GroupBox,% "x" secondRowX-10 " y" secondRowY-10 " w215 h140 c000000"
+		Gui, Main:Add, Checkbox,% "x" secondRowX " y" secondRowY " hwndhCB_UseNSOOverlay",Use NSO Overlay
+		useNSOCoords := Control_Coords("Main", hCB_UseNSOOverlay)
+		__f := GUI_Main.ToggleCheckBox.bind(GUI_Main, "UseNSOOverlay", hCB_UseNSOOverlay)
+		GuiControl, Main:+g,% hCB_UseNSOOverlay,% __f
+
+
+		profBoxCoords := Control_Coords("Main", hGB_ProfileSettings)
+		Gui, Main:Add, Text,% "xp yp+25 w" profNameCoords.W " Center BackgroundTrans",Steam Overlay shortcut:
+		Gui, Main:Add, Hotkey,% "xp y+5 wp vvHK_SteamOverlay hwndhHK_SteamOverlay",% steamHotkey
 		__f := GUI_Main.OnHotkeyChange.bind(GUI_Main, "SteamOverlay", hHK_SteamOverlay)
 		GuiControl, Main:+g,% hHK_SteamOverlay,% __f
-		; Gui, Main:Add, Checkbox,% "xp y+2 -tab",CTRL
 
 		Gui, Main:Add, Text,% "xp y+15 wp Center BackgroundTrans",NSO Overlay shortcut:
-		Gui, Main:Add, Hotkey,% "xp y+10 wp vvHK_NSOOverlay hwndhHK_NSOOverlay",% NSOHotkey
+		Gui, Main:Add, Hotkey,% "xp y+5 wp vvHK_NSOOverlay hwndhHK_NSOOverlay",% NSOHotkey
 		__f := GUI_Main.OnHotkeyChange.bind(GUI_Main, "NSOOverlay", hHK_NSOOverlay)
 		GuiControl, Main:+g,% hHK_NSOOverlay,% __f
 
@@ -147,23 +156,34 @@ Class GUI_Main {
 		__f := GUI_Main.OnAddOrRemoveBtnClick.bind(GUI_Main, "Remove")
 		GuiControl, Main:+g,% hBTN_Remove,% __f
 
+		Gui, Main:Add, Link, x5 y+10 hwndhLINK_GitHub,% "<a href=""" ProgramValues.Github """>See on GitHub</a>"
+		Gui, Main:Add,Text,x+5 yp,-
+		Gui, Main:Add, Link, x+5 yp hwndhLINK_Discord,% "<a href=""" ProgramValues.Discord """>Join on Discord</a>"
+
 		; ToolTips
 		AddToolTip(hEDIT_ProfileName, "Name of the profile as it will be used for the /Profile parameter.")
 		AddToolTip(hEDIT_Launcher, "Location of the launcher executable used to run the game."
 		.			 "`nIf you are running the game directly without any launcher, untick the case.")
 		AddToolTip(hEDIT_Client, "Location of the game executable.")
+		AddToolTip(hEDIT_LaunchParameters, "Launch parameters for the game that will be launched."
+		. 			"`nIf you are using a launcher, these parameters will be used for the launcher only."
+		. 			"`nWhen using a launcher, you cannot set parameters for the client as " ProgramValues.Name " does NOT run the client."
+		. 			"`nIf your client requires parameter, it would be recommended to use a shortcut (.lnk) file and use that file as the client.")
 		AddToolTip(hCB_UseNSOOverlay, "Work-around for games where the Steam Overlay does not normally work.")
 		AddToolTip(hHK_SteamOverlay, "Your hotkey used to normally toggle the Steam Overlay."
 		.			"`nIt will be used to automatically enable the Steam Overlay inside the NSO Overlay."
 		.			"`n`nIf the Steam Overlay does not appear on the NSO Overlay,"
 		.			"`n simply press your Steam Overlay shortcut to bring it up.")
 		AddToolTip(hHK_NSOOverlay, "Hotkey to toggle the NSO Overlay.")
+		AddToolTip(hLINK_GitHub, ProgramValues.Github)
+		AddToolTip(hLINK_Discord, ProgramValues.Discord)
 
 		; Handles
 		GUI_Main_Handles.EDIT_ProfilName := hEDIT_ProfileName
 		GUI_Main_Handles.EDIT_Launcher := hEDIT_Launcher
 		GUI_Main_Handles.CB_EnableLauncher := hCB_EnableLauncher
 		GUI_Main_Handles.EDIT_Client := hEDIT_Client
+		GUI_Main_Handles.EDIT_LaunchParameters := hEDIT_LaunchParameters
 		GUI_Main_Handles.CB_UseNSOOverlay := hCB_UseNSOOverlay
 
 		GUI_Main_Handles.TEXT_CmdHelp := hTEXT_CmdHelp
@@ -181,6 +201,23 @@ Class GUI_Main {
 		GUI_Main_Close:
 			Gui, %A_Gui%:Destroy
 		return
+	}
+
+	SetLaunchParameters(CtrlHwnd) {
+		global ProgramValues
+		global GUI_Main_Values, GUI_Main_Handles
+		static profilesINI
+		profilesINI := GUI_Main_Values.Ini_File
+
+		if !GUI_Main.IsSelectedProfileNameValid() {
+			Return
+		}
+
+		GuiControlGet, content, %A_Gui%:,% CtrlHwnd
+		profileName := GUI_Main.LV_GetSelectedContent()
+		keysAndValues := INI.Get(profilesINI, profileName)
+
+		INI.Set(profilesINI, profileName, "Launch_Parameters", content)
 	}
 
 	OnHotkeyChange(param, CtrlHwnd, special="") {
@@ -352,6 +389,7 @@ Class GUI_Main {
 				INI.Set(profilesINI, userInput, "Client", "")
 				INI.Set(profilesINI, userInput, "Enable_Launcher", False)
 				INI.Set(profilesINI, userInput, "Use_NSO_Overlay", False)
+				INI.Set(profilesINI, userInput, "Launch_Parameters", "")
 			}
 		}
 		else if (param = "Remove") {
@@ -394,6 +432,7 @@ Class GUI_Main {
 			GuiControl, Main:,% GUI_Main_Handles.CB_EnableLauncher,% keysAndValues.Enable_Launcher
 			GuiControl, Main:,% GUI_Main_Handles.EDIT_Launcher,% keysAndValues.Launcher
 			GuiControl, Main:,% GUI_Main_Handles.EDIT_Client,% keysAndValues.Client
+			GuiControl, Main:,% GUI_Main_Handles.EDIT_LaunchParameters,% keysAndValues.Launch_Parameters
 
 			if (keysAndValues.Use_NSO_Overlay && keysAndValues.Use_NSO_Overlay != "ERROR")
 				GuiControl, Main:,% GUI_Main_Handles.CB_UseNSOOverlay, 1

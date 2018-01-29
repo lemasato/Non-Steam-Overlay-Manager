@@ -78,11 +78,12 @@ Start_Script() {
 
 	ProgramValues.Name 					:= "NSO Manager"
 	ProgramValues.Version 				:= "0.2.1"
-	ProgramValues.Branch 				:= "master"
+	ProgramValues.Branch 				:= "master" 
 	ProgramValues.Github_User 			:= "lemasato"
 	ProgramValues.GitHub_Repo 			:= "Non-Steam-Overlay-Manager"
 
 	ProgramValues.GitHub 				:= "https://github.com/" ProgramValues.Github_User "/" ProgramValues.GitHub_Repo
+	ProgramValues.Discord 				:= "https://discord.gg/UMxqtfC"
 
 	ProgramValues.Local_Folder 			:= A_MyDocuments "\AutoHotkey\" ProgramValues.Name
 	ProgramValues.Resources_Folder 		:= ProgramValues.Local_Folder "\resources"
@@ -145,6 +146,7 @@ Start_Script() {
 		client := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Client")
 		enableLauncher := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Enable_Launcher")
 		useNSOOverlay := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Use_NSO_Overlay")
+		launchParams := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Launch_Parameters")
 
 		global NSO_OVERLAY_ENABLED := useNSOOverlay
 
@@ -160,9 +162,9 @@ Start_Script() {
 				Hotkey, %overlayHotkey%, NSO_Overlay_Toggle, On
 			}
 			if (enableLauncher)
-				NonSteam_Run(launcher, client)
+				NonSteam_Run(launcher, client, launchParams)
 			else
-				NonSteam_Run("", client)
+				NonSteam_Run("", client, launchParams)
 
 			ExitApp ; Exit app upon game closure
 		}
