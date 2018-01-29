@@ -51,8 +51,7 @@ Update_Local_Config() {
 	; Handle changes inbetween versions
 	priorVer := Ini.Get(iniFile, "PROGRAM", "Version", "UNKNOWN")
 	priorVerNum := (priorVer="UNKNOWN")?(ProgramValues.Version):(priorVer)
-
-	subVersions := StrSplit(priorVersionNum, ".")
+	subVersions := StrSplit(priorVerNum, ".")
 	mainVer := subVersions[1], releaseVer := subVersions[2], patchVer := subVersions[3]
 
 	; Bug from 0.2: Remove the "0" section that was created when it shouldn't have been
