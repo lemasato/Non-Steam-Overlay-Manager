@@ -97,10 +97,12 @@ NSO_Overlay_Run() {
 	Return
 
 	NSO_Overlay_Run_SteamOverlay:
-		BlockInput, On
+		BlockInput, On ; Only work if elevated
 
 		detectHiddenWin := A_DetectHiddenWindows
 		DetectHiddenWindows, On
+		WinMove, ahk_pid %OVERLAY_PID%, , 0, 0, 0, 0
+		WinShow, ahk_pid %OVERLAY_PID%
 
 		keyDelay := A_KeyDelay
 		keyDuration := A_KeyDuration
@@ -109,16 +111,18 @@ NSO_Overlay_Run() {
 		curWin := WinActive("A")
 		WinActivate, ahk_pid %OVERLAY_PID%
 		WinWaitActive, ahk_pid %OVERLAY_PID%
-		Sleep 1000
+		Sleep 250
 		WinActivate, ahk_pid %OVERLAY_PID%
+		Sleep 250
 		SendEvent,% ProgramSettings.Steam_Overlay.Hotkey_String
-		Sleep 1000
 
+		Sleep 10
 		WinActivate, ahk_id %curWin%
 		SetKeyDelay, %keyDelay%, %keyDuration%
 		DetectHiddenWindows, %detectHiddenWin%
 
-		BlockInput, Off
+		WinHide, ahk_pid %OVERLAY_PID%
+		BlockInput, Off ; Only work if elevated
 	Return
 
 }
