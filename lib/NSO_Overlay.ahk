@@ -1,7 +1,12 @@
-﻿NSO_Overlay_Toggle() {
+﻿NSO_Overlay_Toggle(force="") {
 	global OVERLAY_PID, OVERLAY_TOGGLE
 	static previousWin
 	OVERLAY_TOGGLE := !OVERLAY_TOGGLE
+
+	if (force = "On")
+		OVERLAY_TOGGLE := True
+	else if (force = "Off")
+		OVERLAY_TOGGLE := False
 
 	DetectHiddenWindows, On
 	if (OVERLAY_TOGGLE) {

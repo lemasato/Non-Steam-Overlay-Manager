@@ -27,7 +27,12 @@ ShellMessage(wParam,lParam) {
 		Return
 
 	if ( wParam=4 or wParam=32772 ) { ; 4=HSHELL_WINDOWACTIVATED | 32772=HSHELL_RUDEAPPACTIVATED
-		if !WinActive("ahk_pid " OVERLAY_PID)
+		if WinActive("ahk_pid " OVERLAY_PID) {
+			Hotkey, Esc, NSO_Overlay_Hide, On
+		}
+		else {
 			NSO_Overlay_Toggle()
+			Hotkey, Esc, NSO_Overlay_Hide, Off
+		}
 	}
 }

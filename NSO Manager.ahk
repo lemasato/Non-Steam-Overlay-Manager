@@ -38,7 +38,7 @@ Return
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #IfWinActive, ahk_group ScriptPID
 
-~Space:: ; Close the SplashTextOn() window
+~$Space:: ; Close the SplashTextOn() window
 	global SPACEBAR_WAIT
 
 	if (SPACEBAR_WAIT) {
@@ -46,6 +46,11 @@ Return
 	}
 Return
 
+#IfWinActive, ahk_exe NSO Overlay.exe
+
+NSO_Overlay_Hide:
+	NSO_Overlay_Toggle("Off")
+Return
 
 #IfWinActive
 
@@ -57,14 +62,11 @@ NSO_Overlay_Toggle:
 		Sleep 100
 	}
 	else {
-		Hotkey, $%A_ThisHotkey%, %A_ThisLabel%, Off
-		Sleep 10
-		SendInput, %A_ThisHotkey%
-		Sleep 10
 		ShowToolTip("This process is not allowed to toggle the NSO Overlay.`nAllowed: " AllowedProcessForOverlay)
-		Hotkey, $%A_ThisHotkey%, %A_ThisLabel%, On
 	}
 Return
+
+#IfWinActive
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -157,7 +159,7 @@ Start_Script() {
 			if (useNSOOverlay) {
 				NSO_Overlay_Run()
 				overlayHotkey := INI.Get(ProgramValues.INI_File, "NSO_Overlay", "Hotkey")
-				Hotkey, %overlayHotkey%, NSO_Overlay_Toggle, On
+				Hotkey, ~$%overlayHotkey%, NSO_Overlay_Toggle, On
 			}
 			if (enableLauncher)
 				NonSteam_Run(launcher, client, launchParams)
