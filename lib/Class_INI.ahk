@@ -11,7 +11,7 @@
 			if (defaultVal != "")
 				IniRead, val,% file,% sect,% key,% defaultVal
 			else IniRead, val,% file,% sect,% key
-			if (val && val != "ERROR") || (val = 0)
+			if (val && val != "ERROR") || (val = 0) || (val = "")
 				Return val
 			else Return "ERROR"
 		}
