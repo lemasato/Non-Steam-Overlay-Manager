@@ -32,8 +32,6 @@ Menu,Tray,Icon
 
 GroupAdd, ScriptPID,% "ahk_pid " DllCall("GetCurrentProcessId")
 
-Hotkey, f1, NSO_Overlay_Toggle
-
 Start_Script()
 Return
 
