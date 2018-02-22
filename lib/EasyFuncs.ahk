@@ -1,4 +1,46 @@
-﻿Set_Format(_NumberType="", _Format="") {
+﻿#SingleInstance, Force
+
+Get_HotkeyString(_hotkey, simpleString=False) {
+	Loop 3 {
+		char := SubStr(_hotkey, A_Index, 1)
+		restOfString := SubStr(_hotkey, A_Index)
+		if (simpleString)
+			keyStr := (char="^")?("Ctrl"):(char="!")?("Alt"):(char="+")?("Shift"):("")
+		else 
+			keyStr := (char="^")?("{Ctrl Down}"):(char="!")?("{Alt Down}"):(char="+")?("{Shift Down}"):("")
+
+		if !(keyStr)
+			Break
+
+		if (simpleString)
+			hotkeyString .= (keyStr)?(keyStr "+"):("")
+		else 
+			hotkeyString .= (keyStr)?(keyStr):("")
+	}
+
+	if (simpleString) {
+		hotkeyString .= restOfString
+		Return hotkeyString
+	}
+
+	hotkeyString .= "{" restOfString " Down}"
+
+	split := StrSplit(hotkeyString, "Down}")
+	for key, element in split {
+		if (element)
+			maxIndex++
+	}
+	splitIndex := maxIndex
+			
+	Loop, %maxIndex% {
+		hotkeyString .= split[splitIndex] "Up}"
+		splitIndex--
+	}
+
+	Return hotkeyString
+}
+
+Set_Format(_NumberType="", _Format="") {
 	static prevNumberType, prevFormat
 	prevNumberType := _NumberType
 	prevFormat := A_FormatFloat
