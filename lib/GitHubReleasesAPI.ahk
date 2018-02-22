@@ -32,8 +32,6 @@ GetLatestRelease_Infos(user, repo, preRelease=false) {
 		releasesJSON := httpReq.ResponseText
 		parsedJSON := JSON.Load(releasesJSON)
 
-		clipboard := releasesJSON
-
 		if (preRelease=true) {
 			for subArr, nothing in parsedJSON {
 				for key, content in parsedJSON[subArr] {
