@@ -233,37 +233,21 @@ Class GUI_Main {
 
 		if content in +,^,!,+^,+!,^!,+^!    ;if the hotkey contains only modifiers, return to wait for a key.
 			return
-
-		if (param = "NSOOverlay") 
-			INI.Set(iniFile, "NSO_Overlay", "Hotkey", content)
-		else if (param = "SteamOverlay") {
-			INI.Set(iniFile, "Steam_Overlay", "Hotkey", content)
-			Loop 3 {
-				char := SubStr(content, A_Index, 1)
-				restOfString := SubStr(content, A_Index)
-				keyStr := (char="^")?("{Ctrl Down}"):(char="!")?("{Alt Down}"):(char="+")?("{Shift Down}"):("")
-
-				if !(keyStr)
-					Break
-
-				hotkeyString .= (keyStr)?(keyStr):("")
-			}
-
-			hotkeyString .= "{" restOfString " Down}"
-
-			split := StrSplit(hotkeyString, "Down}")
-			for key, element in split {
-				if (element)
-					maxIndex++
-			}
-			splitIndex := maxIndex
 			
-			Loop, %maxIndex% {
-				hotkeyString .= split[splitIndex] "Up}"
-				splitIndex--
+		if (param = "SteamOverlay" || param = "NSOOverlay") {
+
+			hotkeyString := Get_HotkeyString(content)
+			hotkeySimpleString := Get_HotkeyString(content, True)
+
+			if (param = "SteamOverlay") {
+				INI.Set(iniFile, "Steam_Overlay", "Hotkey", content)
+				Ini.Set(ProgramValues.Ini_File, "Steam_Overlay", "Hotkey_String", hotkeyString)
+				Ini.Set(ProgramValues.Ini_File, "Steam_Overlay", "Hotkey_SimpleString", hotkeySimpleString)
 			}
-			
-			Ini.Set(ProgramValues.Ini_File, "Steam_Overlay", "Hotkey_String", hotkeyString)
+			else if (param = "NSOOverlay") {
+				INI.Set(iniFile, "NSO_Overlay", "Hotkey", content)
+				Ini.Set(ProgramValues.Ini_File, "NSO_Overlay", "Hotkey_SimpleString", hotkeySimpleString)
+			}
 		}
 	}
 
