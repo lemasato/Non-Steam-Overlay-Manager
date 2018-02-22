@@ -41,7 +41,7 @@
 	}
 
 	if (NSO_OVERLAY_ENABLED) {
-		NSOOverlayHotkey := INI.Get(ProgramValues.Ini_File, "NSO_Overlay", "Hotkey")
+		NSOOverlayHotkey := INI.Get(ProgramValues.Ini_File, "NSO_Overlay", "Hotkey_SimpleString")
 		Menu,Tray,Tip,% ProgramValues.Name "`nGame is running (PID " gamePID ")`n" game "`n`nNSO Overlay Hotkey: " NSOOverlayHotkey
 	}
 	else {
