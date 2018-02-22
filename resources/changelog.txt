@@ -1,4 +1,19 @@
 -----------------------
+v0.2.4 (22 Feb 2018)
+	It has come to my attention that this tool is NOT compatible with WinStore Games.
+	This is because, when creating a shortcut for said games, their "Field" does not point to the game executable.
+	For this reason, until I can work on improvements, I have created a small side app that will help you having the NSO Overlay on such games.
+	You can find more infos about it over issue #8.
+	
+	Changes:
+	- When the "NSO Overlay" setting is enabled, the tray tip will now show the real hotkey string.
+	(Back then, having the key bound to CTRL+F1 would show "^F1" as "^" correspdonds to the CTRL modifier. It will now correctly show as "CTRL+F1")
+	
+	Fixes:
+	- Having a "=" sign in the "Launch parameters:" field would wrongfully empty the field.
+	- Upon checking update, the clipboard content would be wrongfully changed.
+
+-----------------------
 v0.2.3 (29 Jan 2018)
 	Improvements:
 	- Minor GUI changes.
