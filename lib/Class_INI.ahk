@@ -22,7 +22,7 @@
 			Loop, Parse, allKeys,% "`n"
 			{
 				keyAndValue := A_LoopField
-				if RegExMatch(keyAndValue, "(.*)=(.*)", found) {
+				if RegExMatch(keyAndValue, "(.*?)=(.*)", found) {
 					keyName := found1, value := found2
 					keyAndValuesArr.Insert(found1, found2)
 					found1 := "", found2 := ""
