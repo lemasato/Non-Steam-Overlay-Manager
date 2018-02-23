@@ -87,5 +87,22 @@ if (ErrorLevel)
 	. "`nFlag: 2"
 
 ; ----------------------------
+if !InStr(FileExist(ProgramValues.Resources_Folder "\WinStore Workaround"), "D")
+	FileCreateDir,% ProgramValues.Resources_Folder "\WinStore Workaround"
+
+FileGetSize, sourceFileSize, resources\WinStore Workaround\ApplicationFrameHost.exe
+if (A_IsCompiled)
+	destFileSize := Get_ResourceSize("resources\WinStore Workaround\ApplicationFrameHost.exe", ProgramValues.Resources_Folder "\WinStore Workaround\ApplicationFrameHost.exe")
+else FileGetSize, destFileSize, % ProgramValues.Resources_Folder "\WinStore Workaround\ApplicationFrameHost.exe"
+
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\WinStore Workaround\ApplicationFrameHost.exe, % ProgramValues.Resources_Folder "\WinStore Workaround\ApplicationFrameHost.exe", 1
+if (ErrorLevel)
+	Msgbox % "Failed to extract file!"
+	. "`nSource: resources\WinStore Workaround\ApplicationFrameHost.exe"
+	. "`nDest: " ProgramValues.Resources_Folder "\WinStore Workaround\ApplicationFrameHost.exe"
+	. "`nFlag: 2"
+
+; ----------------------------
 
 }

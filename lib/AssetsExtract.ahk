@@ -63,6 +63,19 @@
 			appendToFile .= FileInstall("""" filePath """", "ProgramValues.Resources_Folder """ "\NSO Overlay\" A_LoopFileName """", 2)
 	}
 
+;	\resources\WinStore Workaround\
+	resFolder := A_ScriptDir "\resources\WinStore Workaround"
+	allowedFile := "ApplicationFrameHost.exe"
+
+	Loop, Files,% resFolder "\*"
+	{
+		RegExMatch(A_LoopFileFullPath, "\\resources\\WinStore Workaround\\(.*)", path)
+		filePath := "resources\WinStore Workaround\" path1
+
+		if A_LoopFileName in %allowedFile%
+			appendToFile .= FileInstall("""" filePath """", "ProgramValues.Resources_Folder """ "\WinStore Workaround\" A_LoopFileName """", 2)
+	}
+
 	appendToFile .= "`n}"
 
 ;	ADD TO FILE

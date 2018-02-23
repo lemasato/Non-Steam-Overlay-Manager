@@ -16,13 +16,42 @@ inputFile := "NSO Manager.ahk"
 outputFile := "NSO Manager.exe"
 
 Run_Ahk2Exe(inputFile, ,A_ScriptDir "/resources/icon.ico")
-Set_FileInfos(outputFile, ver, desc, "© lemasato.github.io " A_YYYY)
+Set_FileInfos(outputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
 fileInfos := FileGetInfo(outputFile)
 while (fileInfos.FileVersion != verFull) {
+	ToolTip, #%A_Index%`nAttempting to set file infos for file:`n%outputFile%
 	fileInfos := FileGetInfo(outputFile)
-	Set_FileInfos(outputFile, ver, desc, "© lemasato.github.io " A_YYYY)
+	Set_FileInfos(outputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
 	Sleep 500
 }
+ToolTip,
+fileInfos := ""
+
+; WinStore Workaround file - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FileRead, ver,%A_ScriptDir%\resources\WinStore Workaround\version.txt
+ver := StrReplace(ver, "`n", "")
+ver = %ver% ; Auto trim
+
+verFull := ver
+StringReplace ver,ver,`.,`.,UseErrorLevel
+Loop % 3-ErrorLevel {
+	verFull .= ".0"
+}
+desc := "NSO Manager - WinStore Apps workaround"
+inputFile := A_ScriptDir "\resources\WinStore Workaround\ApplicationFrameHost.ahk"
+outputFile := A_ScriptDir "\resources\WinStore Workaround\ApplicationFrameHost.exe"
+
+Run_Ahk2Exe(inputFile, ,A_ScriptDir "\resources\WinStore Workaround\icon.ico")
+Set_FileInfos(outputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
+fileInfos := FileGetInfo(outputFile)
+while (fileInfos.FileVersion != verFull) {
+	ToolTip, #%A_Index%`nAttempting to set file infos for file:`n%outputFile%
+	fileInfos := FileGetInfo(outputFile)
+	Set_FileInfos(outputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
+	Sleep 500
+}
+ToolTip,
 fileInfos := ""
 
 ; Updater file - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -38,13 +67,15 @@ inputFile := "Updater_v2.ahk"
 outputFile := "Updater_v2.exe"
 
 Run_Ahk2Exe(inputFile, ,A_ScriptDir "/resources/icon.ico")
-Set_FileInfos(outputFile, ver, desc, "© lemasato.github.io " A_YYYY)
+Set_FileInfos(outputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
 fileInfos := FileGetInfo(outputFile)
 while (fileInfos.FileVersion != verFull) {
+	ToolTip, #%A_Index%`nAttempting to set file infos for file:`n%outputFile%
 	fileInfos := FileGetInfo(outputFile)
-	Set_FileInfos(outputFile, ver, desc, "© lemasato.github.io " A_YYYY)
+	Set_FileInfos(outputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
 	Sleep 500
 }
+ToolTip,
 fileInfos := ""
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -58,13 +89,15 @@ Loop % 3-ErrorLevel {
 desc := "NSO Manager: Overlay"
 inputFile := A_ScriptDir "\resources\NSO Overlay\NSO Overlay.exe"
 
-Set_FileInfos(inputFile, ver, desc, "© lemasato.github.io " A_YYYY)
+Set_FileInfos(inputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
 fileInfos := FileGetInfo(inputFile)
 while (fileInfos.FileVersion != verFull) {
+	ToolTip, #%A_Index%`nAttempting to set file infos for file:`n%inputFile%
 	fileInfos := FileGetInfo(inputFile)
-	Set_FileInfos(inputFile, ver, desc, "© lemasato.github.io " A_YYYY)
+	Set_FileInfos(inputFile, verFull, desc, "© lemasato.github.io " A_YYYY)
 	Sleep 500
 }
+ToolTip,
 fileInfos := ""
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
