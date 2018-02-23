@@ -79,7 +79,9 @@ ExitApp
 
 
 Run_Ahk2Exe(fileIn, fileOut="", fileIcon="", mpress=0, binFile="Unicode 32-bit.bin") {
-	ahk2ExePath := A_ProgramFiles "\AutoHotkey\Compiler\Ahk2Exe.exe"
+	EnvGet, ProgramW6432, ProgramW6432
+	_ProgramFiles := (ProgramW6432)?(ProgramW6432):(A_ProgramFiles)
+	ahk2ExePath := _ProgramFiles "\AutoHotkey\Compiler\Ahk2Exe.exe"
 
 
 	SplitPath, fileIn, , fileInDir, , fileInNoExt
@@ -99,8 +101,8 @@ Run_Ahk2Exe(fileIn, fileOut="", fileIcon="", mpress=0, binFile="Unicode 32-bit.b
 	mpressParam := (mpress)?(" /mpress 1"):(" /mpress 0")
 
 	binParam := (binFile)?(" /bin" """" binFile """"):("")
-	if (binFile && !FileExist(A_ProgramFiles "\AutoHotkey\Compiler\" binFile))
-		MsgBox % binFile " not found in " A_ProgramFiles "\AutoHotkey\Compiler\"
+	if (binFile && !FileExist(_ProgramFiles "\AutoHotkey\Compiler\" binFile))
+		MsgBox % binFile " not found in " _ProgramFiles "\AutoHotkey\Compiler\"
 
 	RunWait, %ahk2ExePath% %fileInParam% %fileOutParam% %fileIconParam% %mpressParam% %binFileParam% ,,Hide
 }

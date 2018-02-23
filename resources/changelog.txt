@@ -10,6 +10,9 @@ v0.2.4 (22 Feb 2018)
 	(Back then, having the key bound to CTRL+F1 would show "^F1" as "^" correspdonds to the CTRL modifier. It will now correctly show as "CTRL+F1")
 	
 	Fixes:
+	- The source had been converted into a 64bits executable instead of a 32bits one.
+	(This tool was never meant to be x64 only compatible).
+	This means NSO Manager is now compatible with 32bits OS.
 	- Having a "=" sign in the "Launch parameters:" field would wrongfully empty the field.
 	- Upon checking update, the clipboard content would be wrongfully changed.
 
