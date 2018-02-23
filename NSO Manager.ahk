@@ -77,7 +77,7 @@ Start_Script() {
 	global OVERLAY_PID
 
 	ProgramValues.Name 					:= "NSO Manager"
-	ProgramValues.Version 				:= "0.2.4"
+	ProgramValues.Version 				:= "0.2.5"
 	ProgramValues.Branch 				:= "master" 
 	ProgramValues.Github_User 			:= "lemasato"
 	ProgramValues.GitHub_Repo 			:= "Non-Steam-Overlay-Manager"

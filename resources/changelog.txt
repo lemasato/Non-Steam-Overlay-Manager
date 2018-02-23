@@ -1,5 +1,14 @@
 -----------------------
-v0.2.4 (22 Feb 2018)
+v0.2.5 (23 Feb 2018)
+	Changes:
+	- Added the WinStore Workaround as part of the tool, until I can get to work on a proper solution.
+	It can be found at "Documents\AutoHotkey\NSO Manager\resources\WinStore Workaround\ApplicationFrameHost.exe
+	
+	If you need help getting it to work, head to the main page of the GitHub repository and scroll down to the README section.
+	https://github.com/lemasato/Non-Steam-Overlay-Manager
+	
+-----------------------
+v0.2.4 (23 Feb 2018)
 	It has come to my attention that this tool is NOT compatible with WinStore Games.
 	This is because, when creating a shortcut for said games, their "Field" does not point to the game executable.
 	For this reason, until I can work on improvements, I have created a small side app that will help you having the NSO Overlay on such games.
