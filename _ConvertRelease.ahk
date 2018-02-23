@@ -100,11 +100,24 @@ Run_Ahk2Exe(fileIn, fileOut="", fileIcon="", mpress=0, binFile="Unicode 32-bit.b
 
 	mpressParam := (mpress)?(" /mpress 1"):(" /mpress 0")
 
-	binParam := (binFile)?(" /bin" """" binFile """"):("")
-	if (binFile && !FileExist(_ProgramFiles "\AutoHotkey\Compiler\" binFile))
-		MsgBox % binFile " not found in " _ProgramFiles "\AutoHotkey\Compiler\"
+	SplitPath, binFile, binFileName, binFileDir
+	if (!binFileDir) {
+		binFileDir := _ProgramFiles "\AutoHotkey\Compiler"
+		binFileFullPath := _ProgramFiles "\AutoHotkey\Compiler\" binFile
+		binParam := " /bin """ binFileFullPath """"
+	}
+	else {
+		binFileFullPath := binFile
+		binParam := " /bin " """" binFile """"
+	}
 
-	RunWait, %ahk2ExePath% %fileInParam% %fileOutParam% %fileIconParam% %mpressParam% %binFileParam% ,,Hide
+	if (binFile && !FileExist(binFileFullPath)) {
+		MsgBox % binFile " not found in " _ProgramFiles "\AutoHotkey\Compiler\"
+		. "`nOperation aborted."
+		ExitApp
+	}
+
+	RunWait, %ahk2ExePath% %fileInParam% %fileOutParam% %fileIconParam% %mpressParam% %binParam% ,,Hide
 }
 
 Set_FileInfos(file, version="", desc="", copyright="", adds="") {
