@@ -98,5 +98,5 @@ Update_Local_Config() {
 			INI.Rename(iniFile, A_LoopField, "Use_External_Overlay", A_LoopField, "Use_NSO_Overlay")
 	}
 
-
+	INI.Set(iniFile, "PROGRAM", "Version", ProgramValues.Version)
 }
