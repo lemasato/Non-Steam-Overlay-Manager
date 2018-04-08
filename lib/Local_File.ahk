@@ -54,13 +54,17 @@ Update_Local_Config() {
 	subVersions := StrSplit(priorVerNum, ".")
 	mainVer := subVersions[1], releaseVer := subVersions[2], patchVer := subVersions[3]
 
-	if (mainVer = 0 && releaseVer = "2") {
+	if (mainVer = 0 && releaseVer <= "2") {
 		sects := INI.Get(profilesFile)
 		Loop, Parse,% sects,`n,`r
 		{
-			value := Ini.Get(profilesFile, A_LoopField, "Launch_Parameters")
+			value := INI.Get(profilesFile, A_LoopField, "Launch_Parameters")
 			if (value = "ERROR")
-				Ini.Set(profilesFile, A_LoopField, "Launch_Parameters", A_Space)
+				INI.Set(profilesFile, A_LoopField, "Launch_Parameters", A_Space)
+				
+			value := INI.Get(profilesFile, A_LoopField, "Restrict_NSO_Overlay_Hotkey")
+			if (value = "ERROR")
+				INI.Set(profilesFile, A_LoopField, "Restrict_NSO_Overlay_Hotkey", 1)
 		}
 
 		; Add the SimpleString values
@@ -72,7 +76,6 @@ Update_Local_Config() {
 		steamHotkey := INI.Get(iniFile, "Steam_Overlay", "Hotkey")
 		if (hotkeySimpleStr = "ERROR" || hotkeySimpleStr = "" || !hotkeySimpleStr) && (steamHotkey && steamHotkey != "ERROR")
 			INI.Set(iniFile, "Steam_Overlay", "Hotkey_SimpleString", Get_HotkeyString(steamHotkey, True))
-			
 	}
 
 	; Bug from 0.2: Remove the "0" section that was created when it shouldn't have been

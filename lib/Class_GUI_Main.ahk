@@ -86,7 +86,7 @@ Class GUI_Main {
 		.												 "`n4) Write: /Profile=""Profile Name"""
 		.												 "`n`nKeep your mouse above a control for a tooltip."
 		.												 "`n`nUntick the box next to ""Launcher"" if you wish to use NSO Manager with a software or a game that doesnt use a launcher."
-		Gui, Main:Add, ListView, x5 y+25 w150 h250 hwndhLV_Profiles -HDR -Multi -E0x200 AltSubmit +LV0x10000,Profiles
+		Gui, Main:Add, ListView, x5 y+25 w150 h280 hwndhLV_Profiles -HDR -Multi -E0x200 AltSubmit +LV0x10000,Profiles
 		__f := GUI_Main.OnProfilesLVClick.bind(GUI_Main)
 		GuiControl, Main:+g,% hLV_Profiles, % __f
 		;__ Loop through profiles names
@@ -94,7 +94,7 @@ Class GUI_Main {
 		{
 			LV_Add("", A_LoopField)
 		}
-		Gui, Main:Add, GroupBox, x+10 w510 h280 c000000 hwndhGB_ProfileSettings Center,Profile Settings
+		Gui, Main:Add, GroupBox, x+10 w285 h310 c000000 hwndhGB_ProfileSettings Center,Profile Settings
 		Gui, Main:Add, Text, xp+10 yp+22 Center w200 hwndhTEXT_ProfileName,Profile name
 		profNameCoords := Control_Coords("Main", hTEXT_ProfileName)
 		Gui, Main:Add, Edit, xp y+5 wp-21 hwndhEDIT_ProfileName
@@ -124,21 +124,23 @@ Class GUI_Main {
 		__f := GUI_Main.SetLaunchParameters.bind(GUI_Main, hEDIT_LaunchParameters)
 		GuiControl, Main:+g,% hEDIT_LaunchParameters,% __f
 
-		Gui, Main:Add, Text,% "x" profNameCoords.X " y+20 hwndhTEXT_CmdHelp w180",/Profile=""
-
-
-
-		secondRowX := profNameCoords.X+290, secondRowY := profNameCoords.Y+20
-
-		Gui, Main:Add, GroupBox,% "x" secondRowX-10 " y" secondRowY-10 " w215 h140 c000000"
-		Gui, Main:Add, Checkbox,% "x" secondRowX " y" secondRowY " hwndhCB_UseNSOOverlay",Use NSO Overlay
-		useNSOCoords := Control_Coords("Main", hCB_UseNSOOverlay)
+		Gui, Main:Add, Checkbox,% "x" profNameCoords.X " y+10 hwndhCB_UseNSOOverlay",Use NSO Overlay
 		__f := GUI_Main.ToggleCheckBox.bind(GUI_Main, "UseNSOOverlay", hCB_UseNSOOverlay)
 		GuiControl, Main:+g,% hCB_UseNSOOverlay,% __f
 
+		Gui, Main:Add, Checkbox,% "xp y+5 Center hwndhCB_RestrictNSOOverlayHotkey",Restrict NSO Overlay's shortcut's`nto the game window only.
+		__f := GUI_Main.ToggleCheckBox.bind(GUI_Main, "RestrictNSOOverlayHotkey", hCB_RestrictNSOOverlayHotkey)
+		GuiControl, Main:+g,% hCB_RestrictNSOOverlayHotkey,% __f
+
+		Gui, Main:Add, Text,% "x" profNameCoords.X " y+25 hwndhTEXT_CmdHelp w180",/Profile=""
+
+		profSettingsGBCoords := Control_Coords("Main", hGB_ProfileSettings)
+		secondRowX := profSettingsGBCoords.X+profSettingsGBCoords.W+10, secondRowY := profSettingsGBCoords.Y
+
+		Gui, Main:Add, GroupBox,% " x" secondRowX " y" secondRowY " w220 h" profSettingsGBCoords.H " c000000 hwndhGB_GlobalSettings Center",Global Settings
 
 		profBoxCoords := Control_Coords("Main", hGB_ProfileSettings)
-		Gui, Main:Add, Text,% "xp yp+25 w" profNameCoords.W " Center BackgroundTrans",Steam Overlay shortcut:
+		Gui, Main:Add, Text,% "xp+10 yp+25 w" profNameCoords.W " Center BackgroundTrans",Steam Overlay shortcut:
 		Gui, Main:Add, Hotkey,% "xp y+5 wp vvHK_SteamOverlay hwndhHK_SteamOverlay",% steamHotkey
 		__f := GUI_Main.OnHotkeyChange.bind(GUI_Main, "SteamOverlay", hHK_SteamOverlay)
 		GuiControl, Main:+g,% hHK_SteamOverlay,% __f
@@ -147,6 +149,7 @@ Class GUI_Main {
 		Gui, Main:Add, Hotkey,% "xp y+5 wp vvHK_NSOOverlay hwndhHK_NSOOverlay",% NSOHotkey
 		__f := GUI_Main.OnHotkeyChange.bind(GUI_Main, "NSOOverlay", hHK_NSOOverlay)
 		GuiControl, Main:+g,% hHK_NSOOverlay,% __f
+
 
 		coords := Control_Coords("Main", hLV_Profiles)
 		Gui, Main:Add, Button,% "x" coords.X " y" coords.Y+coords.H+5 " w" coords.W/2-2 " h25 hwndhBTN_Add", Add
@@ -161,15 +164,28 @@ Class GUI_Main {
 		Gui, Main:Add, Link, x+5 yp hwndhLINK_Discord,% "<a href=""" ProgramValues.Discord """>Join on Discord</a>"
 
 		; ToolTips
-		AddToolTip(hEDIT_ProfileName, "Name of the profile as it will be used for the /Profile parameter.")
-		AddToolTip(hEDIT_Launcher, "Location of the launcher executable used to run the game."
-		.			 "`nIf you are running the game directly without any launcher, untick the case.")
-		AddToolTip(hEDIT_Client, "Location of the game executable.")
-		AddToolTip(hEDIT_LaunchParameters, "Launch parameters for the game that will be launched."
-		. 			"`nIf you are using a launcher, these parameters will be used for the launcher only."
-		. 			"`nWhen using a launcher, you cannot set parameters for the client as " ProgramValues.Name " does NOT run the client."
-		. 			"`nIf your client requires parameter, it would be recommended to use a shortcut (.lnk) file and use that file as the client.")
-		AddToolTip(hCB_UseNSOOverlay, "Work-around for games where the Steam Overlay does not normally work.")
+		AddToolTip("AutoPopDelay", 5)
+		AddToolTip(hEDIT_ProfileName, "Name of the profile as it will appear in the list."
+		. 			"`nIt is also the same as the one to be used for the /Profile parameter.")
+		launcherTip := "When enabled:"
+		.			"`nRuns the launcher, then wait for it to run the game."
+		.			"`n`nLocation of the launcher's executable."
+		.			"`nIf your games does not require any launcher then make sure to untick the case."
+		AddToolTip(hEDIT_Launcher, launcherTip)
+		AddToolTip(hCB_EnableLauncher, launcherTip)
+		AddToolTip(hEDIT_Client, "Location of the game's executable."
+		. 			"`nIf your game does not use a launcher, make sure to untick the launcher's case.")
+		AddToolTip(hEDIT_LaunchParameters, "Launch parameters for the game."
+		. 			"`nIf the Launcher's case is enabled, these parameters will be used for the launcher only as it is the one to will run the game."
+		. 			"`nIf your Client requires parameters, pleases use a shortcut (.lnk) file, with those parmeters pre-included, as the client.")
+		AddToolTip(hCB_UseNSOOverlay, "When enabled:"
+		. 			"`nAllows to use the NSO Overlay upon pressing its shortcut."
+		.			"`n`nThe NSO Overlay does NOT inject itself with the game."
+		.			"`nIt is a separate application with its own instance of the Steam Overlay,"
+		.			"`nwhich appears upon pressing your ""NSO Overlay shortcut"" key-combination,"
+		. 			"`nand therefore is entirely safe to use.")
+		AddToolTip(hCB_RestrictNSOOverlayHotkey, "When enabled:"
+		.			"`nPressing the NSO Overlay shortcut will only toggle on/off the overlay if the game's window is active.")
 		AddToolTip(hHK_SteamOverlay, "Your hotkey used to normally toggle the Steam Overlay."
 		.			"`nIt will be used to automatically enable the Steam Overlay inside the NSO Overlay."
 		.			"`n`nIf the Steam Overlay does not appear on the NSO Overlay,"
@@ -185,6 +201,8 @@ Class GUI_Main {
 		GUI_Main_Handles.EDIT_Client := hEDIT_Client
 		GUI_Main_Handles.EDIT_LaunchParameters := hEDIT_LaunchParameters
 		GUI_Main_Handles.CB_UseNSOOverlay := hCB_UseNSOOverlay
+		GUI_Main_Handles.CB_RestrictNSOOverlayHotkey := hCB_RestrictNSOOverlayHotkey
+		GUI_Main_Handles.LV_Profiles := hLV_Profiles
 
 		GUI_Main_Handles.TEXT_CmdHelp := hTEXT_CmdHelp
 		GUI_Main_Values.TEXT_CmdHelp := "/Profile="
@@ -316,6 +334,8 @@ Class GUI_Main {
 			INI.Set(profilesINI, profName, "Use_NSO_Overlay", state)
 		else if (param = "EnableLauncher")
 			INI.Set(profilesINI, profName, "Enable_Launcher", state)
+		else if (param = "RestrictNSOOverlayHotkey")
+			INI.Set(profilesINI, profName, "Restrict_NSO_Overlay_Hotkey", state)
 	}
 
 	ChangeProfileName(param, CtrlHwnd) {
@@ -361,7 +381,8 @@ Class GUI_Main {
 	}
 
 	OnAddOrRemoveBtnClick(param) {
-		global GUI_Main_Values, ProgramValues
+		global ProgramValues
+		global GUI_Main_Values, GUI_Main_Handles
 		static profilesINI
 		profilesINI := GUI_Main_Values.Ini_File
 
@@ -374,6 +395,7 @@ Class GUI_Main {
 				INI.Set(profilesINI, userInput, "Enable_Launcher", False)
 				INI.Set(profilesINI, userInput, "Use_NSO_Overlay", False)
 				INI.Set(profilesINI, userInput, "Launch_Parameters", "")
+				INI.Set(profilesINI, userInput, "Restrict_NSO_Overlay_Hotkey", "1")
 			}
 		}
 		else if (param = "Remove") {
@@ -421,6 +443,9 @@ Class GUI_Main {
 			if (keysAndValues.Use_NSO_Overlay && keysAndValues.Use_NSO_Overlay != "ERROR")
 				GuiControl, Main:,% GUI_Main_Handles.CB_UseNSOOverlay, 1
 			else GuiControl, Main:,% GUI_Main_Handles.CB_UseNSOOverlay, 0
+			if (keysAndValues.Restrict_NSO_Overlay_Hotkey && keysAndValues.Restrict_NSO_Overlay_Hotkey != "ERROR")
+				GuiControl, Main:,% GUI_Main_Handles.CB_RestrictNSOOverlayHotkey, 1
+			else GuiControl, Main:,% GUI_Main_Handles.CB_RestrictNSOOverlayHotkey, 0
 
 			GuiControl, Main:,% GUI_Main_Handles.TEXT_CmdHelp,% GUI_Main_Values.TEXT_CmdHelp """" profileName """"
 		}

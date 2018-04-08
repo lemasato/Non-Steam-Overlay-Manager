@@ -56,13 +56,18 @@ Return
 
 NSO_Overlay_Toggle:
 	WinGet, activeProcess, ProcessName, A
-	if activeProcess in %AllowedProcessForOverlay%
+	if IsIn(activeProcess, AllowedProcessForOverlay) || (RESTRICT_NSO_OVERLAY_HOTKEY = "0")
 	{
 		NSO_Overlay_Toggle()
 		Sleep 100
 	}
 	else {
-		ShowToolTip("This process is not allowed to toggle the NSO Overlay.`nAllowed: " AllowedProcessForOverlay)
+		ShowToolTip("This process is not allowed to toggle the NSO Overlay."
+			. "`nIf you wish to be able to use the NSO Overlay with any program"
+			. "`nwhile your game is running, make sure to untick the following setting for this profile:"
+			. "`n""Restrict NSO Overlay's shortcut's`nto the game window only"""
+			. "`n`nAllowed processes:"
+			. "`n" AllowedProcessForOverlay)
 	}
 Return
 
@@ -147,14 +152,16 @@ Start_Script() {
 		enableLauncher := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Enable_Launcher")
 		useNSOOverlay := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Use_NSO_Overlay")
 		launchParams := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Launch_Parameters")
+		restrictNsoOverlayHK := INI.Get(ProgramValues.Profiles_File, PARAM_PROFILE, "Restrict_NSO_Overlay_Hotkey")
 
+		global RESTRICT_NSO_OVERLAY_HOTKEY := restrictNsoOverlayHK
 		global NSO_OVERLAY_ENABLED := useNSOOverlay
 
 		clientExists := FileExist(client)
 		launcherExists := FileExist(launcher)
 
 		if (client && launcher && enableLauncher && clientExists && launcherExists) || (client && !enableLauncher && clientExists) { ; Profile exists and is valid
-			Menu,Tray,Tip,% ProgramValues.Name "`nProfile: " PARAM_PROFILE
+			Menu,Tray,Tip,% ProgramValues.Name "`nStarting with profile: " PARAM_PROFILE
 
 			if (useNSOOverlay) {
 				NSO_Overlay_Run()
@@ -165,8 +172,6 @@ Start_Script() {
 				NonSteam_Run(launcher, client, launchParams)
 			else
 				NonSteam_Run("", client, launchParams)
-
-			ExitApp ; Exit app upon game closure
 		}
 		else { ; Either not a profile or locations invalid
 			MsgBox, 4096,% ProgramValues.Name,% "Unable to launch the profile: " PARAM_PROFILE
@@ -178,8 +183,8 @@ Start_Script() {
 	} 
 	else { ; No profile param
 		GUI_Main.Create()
+		ExitApp ; Exit app upon gui closure
 	}
-	ExitApp ; Close upon game or GUI closure
 }
 
 ; ================================================

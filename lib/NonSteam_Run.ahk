@@ -1,5 +1,5 @@
 ﻿NonSteam_Run(_launcher, _game, launchParams) {
-	global ProgramValues, NSO_OVERLAY_ENABLED, AllowedProcessForOverlay, OVERLAY_PID
+	global ProgramValues, NSO_OVERLAY_ENABLED, AllowedProcessForOverlay, OVERLAY_PID, RESTRICT_NSO_OVERLAY_HOTKEY
 	static gamePID, noLauncherCount, launcherPID
 
 	SplitPath, _launcher, launcherFileName, launcherDir, launcherFileExt ; Get launcher folder path
@@ -14,18 +14,26 @@
 	}
 	if (gameFileExt = "lnk") {
 		FileGetShortcut,% _game, game, gameDir, gameLaunchParams
-		SplitPath, game, gameFileName
-		if (gameLaunchParams)
-			game := game " " gameLaunchParams
+		if (!game && !gameDir) {
+			noGameDir := True
+			game := _game
+		}
+
+		else {
+			SplitPath, game, gameFileName
+			if (gameLaunchParams)
+				game := game " " gameLaunchParams
+		}
 	}
 
-	AllowedProcessForOverlay .= "," gameFileName "," launcherFileName
+	AllowedProcessForOverlay .= gameFileName?"," gameFileName : ""
+	AllowedProcessForOverlay .= launcherFileName?"," launcherFileName : ""
 
 	if (launcher) {
 		GoSub NonSteam_Run_GetExistingInstances
 
 		Run,% launcher " " launchParams,% launcherDir, launcherPID ; Run launcher, using its directory as WorkingDir
-		Menu,Tray,Tip,% ProgramValues.Name "`nWaiting for a new instance to start.`n" game
+		Menu,Tray,Tip,% ProgramValues.Name "`nWaiting for a new instance: " gameFileName
 
 		Loop {
 			Gosub, NonSteam_Run_WaitNewInstance
@@ -36,16 +44,31 @@
 		}
 	}
 	else {
-		Run,% game " " launchParams,% gameDir, , gamePID
-		WinWait, ahk_pid %gamePID%
+		if (noGameDir) {
+			; ShowToolTip(_tip, tipX=0, tipY=0, radiusX=10, radiusY=10, coord="", whichtooltip="")
+			Run,% game
+
+			ShowToolTip("Unable to get the game's location from its shortcut." ; ontop+exclamation
+			. "`nThis could be due to it being a Windows Store game."
+			. "`n"
+			. "`nThe NSO Overlay hotkey will be forced to be global, and will be working with any window."
+			. "`n" ProgramValues.Name " will be unable to close itself automatically upon game closure."
+			. "", "", "", 50, 50)
+			RESTRICT_NSO_OVERLAY_HOTKEY := "0"
+			SetTimer, NonSteam_Run_RemoveToolTip, -10000
+		}
+		else {
+			Run,% game " " launchParams,% gameDir, , gamePID
+			WinWait, ahk_pid %gamePID%
+		}
 	}
 
 	if (NSO_OVERLAY_ENABLED) {
 		NSOOverlayHotkey := INI.Get(ProgramValues.Ini_File, "NSO_Overlay", "Hotkey_SimpleString")
-		Menu,Tray,Tip,% ProgramValues.Name "`nGame is running (PID " gamePID ")`n" game "`n`nNSO Overlay Hotkey: " NSOOverlayHotkey
+		Menu,Tray,Tip,% ProgramValues.Name "`nNSO Overlay Hotkey: " NSOOverlayHotkey
 	}
 	else {
-		Menu,Tray,Tip,% ProgramValues.Name "`nGame is running (PID " gamePID ")`n" game
+		Menu,Tray,Tip,% ProgramValues.Name "`n" gameFileName " is running (PID " gamePID ")"
 	}
 
 	; Make sure Steam and the game are running with same rights.
@@ -70,9 +93,16 @@
 			Msgbox,% 48+4096,% ProgramValues.Name,% "The game process (" gameFileName " | " gamePID ") is running as elevated but Steam is not. You may be unable to use the Steam Overlay until you restart Steam with elevated rights."
 		}
 	}
-	
-	Process, WaitClose,% gamePID
-	Process, Close, NSO Overlay.exe
+
+	if !(noGameDir) { ; Only close if we have found the game pid
+		Process, WaitClose,% gamePID
+		Process, Close, NSO Overlay.exe
+		ExitApp ; Close upon game or GUI closure
+	}
+	Return
+
+	NonSteam_Run_RemoveToolTip:
+		RemoveToolTip()
 	Return
 
 	NonSteam_Run_GetExistingInstances:
