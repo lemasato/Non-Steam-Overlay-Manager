@@ -1,4 +1,18 @@
 -----------------------
+v0.2.6 (04 Apr 2018)
+	Features:
+	- Added a setting to allow the NSO Overlay shortcut to work with all windows, instead of just the game's window.
+	
+	Changes:
+	- Updated some tooltips, and tray tips.
+	
+	Fixes:
+	- Would be unable to start profiles that use a game from the Windows Store.
+	This is because the shortcut (.lnk) file for the game does not specify a path and therefore does not allow us to run it ourselves to retrieve the game's PID and executable name.
+	Upon running such a profile, NSO Manager will not be able to close itself automatically upon game closure.	
+	Additionally, if the "Use NSO Overlay" setting is enabled, the NSO Overlay shortcut will be forced to function on all windows.
+
+-----------------------
 v0.2.5 (23 Feb 2018)
 	Changes:
 	- Added the WinStore Workaround as part of the tool, until I can get to work on a proper solution.
