@@ -1,10 +1,4 @@
-﻿    ProcessName := "PathOfExile.exe"
-    UserName    := A_UserName
-
-    pInfos := Get_ProcessInfos("PathOfExile.exe", "5528")
-    msgbox % pInfos[1]["TokenIsElevated"]
-
-Get_ProcessInfos(_processName="", _processID="", _userName="") {
+﻿Get_ProcessInfos(_processName="", _processID="", _userName="") {
 /*		Slightly modified version of the function by Oldman
    		autohotkey.com/board/topic/109575-how-to-detect-if-a-processapplication-is-running-with-elevated-rights/?p=652327
 
