@@ -14,7 +14,6 @@
 		WinGetPos, windowX, windowY, windowW, windowH, A
 		previousWin := WinActive("A")
 
-		WinSet, Trans, 0, ahk_pid %OVERLAY_PID%
 		WinShow, ahk_pid %OVERLAY_PID%
 		WinActivate, ahk_pid %OVERLAY_PID%
 
@@ -27,7 +26,7 @@
 			}
 		}
 
-		WinSet, Trans, 220, ahk_pid %OVERLAY_PID%
+		WinSet, Trans, 220, ahk_pid %OVERLAY_PID% ; TO_DO prob increase?
 	}
 	else {
 		WinHide, ahk_pid %OVERLAY_PID%
