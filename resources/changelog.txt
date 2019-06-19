@@ -1,4 +1,12 @@
 -----------------------
+v0.2.7 (19 June 2019)
+	Changes:
+	- Replaced NSO Overlay executable with source from Unity.
+	- Removed the Windows Store Workaround executable as it is not needed anymore since 0.2.6.
+	- Removed the message box that appears after 50s if the game executable isn't found.
+	Instead, the tool will scan for the game executable every second, indefinitely, until found.
+
+-----------------------
 v0.2.6 (04 Apr 2018)
 	Features:
 	- Added a setting to allow the NSO Overlay shortcut to work with all windows, instead of just the game's window.
