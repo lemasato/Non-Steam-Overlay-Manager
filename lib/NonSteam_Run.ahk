@@ -32,7 +32,7 @@
 	if (launcher) {
 		GoSub NonSteam_Run_GetExistingInstances
 
-		Run,% launcher " " launchParams,% launcherDir, launcherPID ; Run launcher, using its directory as WorkingDir
+		Run,% launcher " " launchParams,% launcherDir, , launcherPID ; Run launcher, using its directory as WorkingDir
 		Menu,Tray,Tip,% ProgramValues.Name "`nWaiting for a new instance: " gameFileName
 
 		Loop {
@@ -40,7 +40,7 @@
 			if (gamePID) {
 				Break
 			}
-			Sleep 5000
+			Sleep 1000
 		}
 	}
 	else {
@@ -110,20 +110,6 @@
 	Return
 
 	NonSteam_Run_WaitNewInstance:
-		newPidList := ""
-
-		if (noLauncherCount > 10) {
-			launcherCloseElapsed := A_Now
-			EnvSub, launcherCloseElapsed, %launcherCloseTime%, Minutes
-			MsgBox % "The launcher window has been closed for " launcherCloseElapsed " minutes and no new game instance has been detected ever since.`n`n" ProgramValues.Name " will therefore be closing."
-			ExitApp
-		}
-		if !WinExist("ahk_pid " launcherPID) {
-			if (!launcherCloseTime)
-				launcherCloseTime := A_Now
-			noLauncherCount++
-		}
-
 		newPidList := Get_Windows_PID(gameFileName, "ahk_exe", ",")
 
 		if (pidList) {
