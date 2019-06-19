@@ -104,23 +104,6 @@ if (ErrorLevel)
 	. "`nFlag: 2"
 
 ; ----------------------------
-if !InStr(FileExist(ProgramValues.Resources_Folder "\NSO Overlay"), "D")
-	FileCreateDir,% ProgramValues.Resources_Folder "\NSO Overlay"
-
-FileGetSize, sourceFileSize, resources\NSO Overlay\_BuildUnityFolder.lnk
-if (A_IsCompiled)
-	destFileSize := Get_ResourceSize("resources\NSO Overlay\_BuildUnityFolder.lnk", ProgramValues.Resources_Folder "\NSO Overlay\_BuildUnityFolder.lnk")
-else FileGetSize, destFileSize, % ProgramValues.Resources_Folder "\NSO Overlay\_BuildUnityFolder.lnk"
-
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\NSO Overlay\_BuildUnityFolder.lnk, % ProgramValues.Resources_Folder "\NSO Overlay\_BuildUnityFolder.lnk", 1
-if (ErrorLevel)
-	Msgbox % "Failed to extract file!"
-	. "`nSource: resources\NSO Overlay\_BuildUnityFolder.lnk"
-	. "`nDest: " ProgramValues.Resources_Folder "\NSO Overlay\_BuildUnityFolder.lnk"
-	. "`nFlag: 2"
-
-; ----------------------------
 if !InStr(FileExist(ProgramValues.Resources_Folder "\NSO Overlay\NSO Overlay_Data"), "D")
 	FileCreateDir,% ProgramValues.Resources_Folder "\NSO Overlay\NSO Overlay_Data"
 

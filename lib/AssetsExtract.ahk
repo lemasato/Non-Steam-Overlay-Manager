@@ -52,12 +52,14 @@
 
 ;	\resources\NSO Overlay\
 	resFolder := A_ScriptDir "\resources\NSO Overlay"
+	excludedExt := "lnk"
 
 	Loop, Files,% resFolder "\*", R
 	{
 	 	RegExMatch(A_LoopFileFullPath, "\\resources\\NSO Overlay\\(.*)", path)
 	 	filePath := "resources\NSO Overlay\" path1
 
+		 if A_LoopFileExt not in %excludedExt%
 	 	appendToFile .= FileInstall("""" filePath """", "ProgramValues.Resources_Folder """ "\NSO Overlay\" path1 """", 2)
 	}
 
