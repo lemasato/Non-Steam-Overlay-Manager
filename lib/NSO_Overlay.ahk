@@ -26,7 +26,7 @@
 			}
 		}
 
-		WinSet, Trans, 220, ahk_pid %OVERLAY_PID% ; TO_DO prob increase?
+		; WinSet, Trans, 220, ahk_pid %OVERLAY_PID% ; TO_DO prob increase?
 	}
 	else {
 		WinHide, ahk_pid %OVERLAY_PID%
