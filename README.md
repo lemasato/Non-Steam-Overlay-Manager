@@ -16,37 +16,6 @@ https://discord.gg/UMxqtfC
 
 To add another game, the steps from 3-6.  
 
-### It doesn't work for my WinStore App game, what do I do?
-This is a known issue and a workaround has been released until I can work on a proper solution.
-
-1. First, create a shortcut for your game.  
-To do that, press Win+R and type: `shell:AppsFolder`. Find your game, right click on it, create a shortcut.  
-The newly created shortcut will be on your desktop, but you can move it wherever you want.  
-
-1. Run NSO Manager and set up a profile that uses the workaround file as Client location.  
-The file can be found at: \Documents\AutoHotkey\NSO Manager\resources\WinStore Workaround.  
-
-1. Make sure that you have both Use NSO Overlay and NSO Overlay shortcut enabled and set.  
-Also be sure to have the Launcher location checkbox unticked.  
-
-1. Add NSO Manager to Steam as you would normally and run it ([See here](https://github.com/lemasato/Non-Steam-Overlay-Manager#how-do-i-use-it)).  
-
-1. A dialog will appear. It allows to choose if this side-tool should be closing on game closure.  
-`Do nothing` means it will run in the background and will have to be closed manually.  
-If your games do not appear:  
-
-    - Easy way: choose "Do nothing".  
-You will have to manually close the side-app upon closing your game.  
-Otherwise Steam will still show you as playing.
-    - Advanced way: Add your game to the .ini file from the same folder as the side-app workaround.  
-Simply add a line for the game in both [SHORTCUTS] and [EXECUTABLES]
-
-1. If it's your first time running the profile, you will be asked to point to the shortcut file we created earlier.  
-This is neccessary so that we can start the game.
-
-1. After that, you will be asked to point the game executable. This can easily be identified by using the Task Manager.  
-This is only used so that this side-app workaround will be closing automatically when the game closes.
-
 ### Does it really work for any game?  
 It does.  
 Even though some games do not allowed Steam to hook their overlay to their process, we can still work around it by hooking the Steam overlay to an external process: NSO Overlay.  
@@ -72,3 +41,24 @@ This hotkey has to be different than the one used for Steam.
 The screen will fade to black, and you should now be able to see the Steam Overlay.  
 If you cannot see the Steam Overlay, simply press your "Steam Overlay" hotkey.  
 If for some reason it still doesn't work, try running Steam with elevated (admin) rights to avoid any issue.  
+
+### How to use it with the Discord Overlay?
+
+1. Start the NSO Overlay executable from `\Documents\AutoHotkey\NSO Manager\resources\NSO Overlay\NSO Overlay.exe`
+1. In Discord: Settings > Overlay. Make sure the in-game overlay is enabled and hotkey is set.
+1. In Discord: Settings > Game Activity. Click on "Not seeing your game? Add it!" and select NSO Overlay from the list.
+Make sure to enable the discord overlay for NSO Overlay by clicking on the "Toggle overlay" icon on the far right.
+1. You can now close the NSO Overlay executable and start your game as you would normally.
+While in game, press the NSO Overlay hotkey first, then press your Discord Overlay hotkey.
+
+### How do I add a Windows Store Game?
+
+1. Create a shortcut for your game:
+Press Win+R and type: `shell:AppsFolder`. Find your game, right click on it, create a shortcut.  
+The newly created shortcut will be on your desktop, but you can move it wherever you want.
+
+1. Run NSO Manager and set up a profile that uses the newly created shortcut.
+
+1. Make sure that you have "Use NSO Overlay" enabled and "NSO Overlay shortcut" configured.  
+
+1. Make sure that the box "Restrict NSO Overlay shortcuts to the game window only" in **unticked**.
