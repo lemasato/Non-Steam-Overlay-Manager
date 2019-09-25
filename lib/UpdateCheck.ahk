@@ -70,7 +70,7 @@ Run_Updater(downloadLink) {
 	INI.Set(iniFile, "PROGRAM", "LastUpdate", A_Now)
 	Run,% ProgramValues.Updater_File 
 	. " /Name=""" ProgramValues.Name  """"
-	. " /File_Name=""" A_ScriptDir "\" ProgramValues.Name ".exe" """"
+	. " /File_Name=""" A_ScriptFullPath """"
 	. " /Local_Folder=""" ProgramValues.Local_Folder """"
 	. " /Ini_File=""" ProgramValues.Ini_File """"
 	. " /NewVersion_Link=""" downloadLink """"
