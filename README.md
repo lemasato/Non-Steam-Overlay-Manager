@@ -16,18 +16,6 @@ https://discord.gg/UMxqtfC
 
 To add another game, the steps from 3-6.  
 
-### How do I add a Windows Store Game?
-
-1. Create a shortcut for your game:
-Press Win+R and type: `shell:AppsFolder`. Find your game, right click on it, create a shortcut.  
-The newly created shortcut will be on your desktop, but you can move it wherever you want.
-
-1. Run NSO Manager and set up a profile that uses the newly created shortcut.
-
-1. Make sure that you have "Use NSO Overlay" enabled and "NSO Overlay shortcut" configured.  
-
-1. Make sure that the box "Restrict NSO Overlay shortcuts to the game window only" in **unticked**.
-
 ### Does it really work for any game?  
 It does.  
 Even though some games do not allowed Steam to hook their overlay to their process, we can still work around it by hooking the Steam overlay to an external process: NSO Overlay.  
@@ -53,3 +41,24 @@ This hotkey has to be different than the one used for Steam.
 The screen will fade to black, and you should now be able to see the Steam Overlay.  
 If you cannot see the Steam Overlay, simply press your "Steam Overlay" hotkey.  
 If for some reason it still doesn't work, try running Steam with elevated (admin) rights to avoid any issue.  
+
+### How to use it with the Discord Overlay?
+
+1. Start the NSO Overlay executable from `\Documents\AutoHotkey\NSO Manager\resources\NSO Overlay\NSO Overlay.exe`
+1. In Discord: Settings > Overlay. Make sure the in-game overlay is enabled and hotkey is set.
+1. In Discord: Settings > Game Activity. Click on "Not seeing your game? Add it!" and select NSO Overlay from the list.
+Make sure to enable the discord overlay for NSO Overlay by clicking on the "Toggle overlay" icon on the far right.
+1. You can now close the NSO Overlay executable and start your game as you would normally.
+While in game, press the NSO Overlay hotkey first, then press your Discord Overlay hotkey.
+
+### How do I add a Windows Store Game?
+
+1. Create a shortcut for your game:
+Press Win+R and type: `shell:AppsFolder`. Find your game, right click on it, create a shortcut.  
+The newly created shortcut will be on your desktop, but you can move it wherever you want.
+
+1. Run NSO Manager and set up a profile that uses the newly created shortcut.
+
+1. Make sure that you have "Use NSO Overlay" enabled and "NSO Overlay shortcut" configured.  
+
+1. Make sure that the box "Restrict NSO Overlay shortcuts to the game window only" in **unticked**.
