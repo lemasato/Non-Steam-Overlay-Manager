@@ -1,4 +1,14 @@
 -----------------------
+v0.2.8 (25 Sept 2019)
+	Changes:
+	- Removed the transparency of the NSO Overlay.
+	The transparency of the overlay was preventing Discord from detecting it.
+	- No longer rename the executable back to "NSO Overlay" after updating.
+	
+	Fixes:
+	- Fixed compatibility with the Discord Overlay.
+
+-----------------------
 v0.2.7 (19 June 2019)
 	Changes:
 	- Replaced NSO Overlay executable with source from Unity.
