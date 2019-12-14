@@ -163,15 +163,16 @@ Start_Script() {
 		if (client && launcher && enableLauncher && clientExists && launcherExists) || (client && !enableLauncher && clientExists) { ; Profile exists and is valid
 			Menu,Tray,Tip,% ProgramValues.Name "`nStarting with profile: " PARAM_PROFILE
 
+			if (enableLauncher)
+				NonSteam_Run(launcher, client, launchParams)
+			else
+				NonSteam_Run("", client, launchParams)
+
 			if (useNSOOverlay) {
 				NSO_Overlay_Run()
 				overlayHotkey := INI.Get(ProgramValues.INI_File, "NSO_Overlay", "Hotkey")
 				Hotkey, ~$%overlayHotkey%, NSO_Overlay_Toggle, On
 			}
-			if (enableLauncher)
-				NonSteam_Run(launcher, client, launchParams)
-			else
-				NonSteam_Run("", client, launchParams)
 		}
 		else { ; Either not a profile or locations invalid
 			MsgBox, 4096,% ProgramValues.Name,% "Unable to launch the profile: " PARAM_PROFILE
