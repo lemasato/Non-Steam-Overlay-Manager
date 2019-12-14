@@ -94,11 +94,7 @@
 		}
 	}
 
-	if !(noGameDir) { ; Only close if we have found the game pid
-		Process, WaitClose,% gamePID
-		Process, Close, NSO Overlay.exe
-		ExitApp ; Close upon game or GUI closure
-	}
+	ProgramValues.GamePID :=gameP
 	Return
 
 	NonSteam_Run_RemoveToolTip:

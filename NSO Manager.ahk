@@ -181,6 +181,10 @@ Start_Script() {
 			.									"`n`nPlease make sure locations are correct and try again."
 			GUI_Main.Create()
 		}
+
+		Process, WaitClose,% ProgramValues.GamePID
+		Process, Close, NSO Overlay.exe
+		ExitApp
 	} 
 	else { ; No profile param
 		GUI_Main.Create()
