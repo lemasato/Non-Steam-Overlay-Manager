@@ -42,6 +42,22 @@
 			}
 			Sleep 1000
 		}
+
+		for Item in ComObjGet( "winmgmts:" ).ExecQuery("Select * from Win32_Process") {
+			Commandline := Item.Commandline
+			StringReplace Parameters, Commandline, % Item.ExecutablePath
+			StringReplace Parameters, Parameters, ""
+			if (Trim(Parameters) <> "") && (Item.Name = gameFileName) {
+				exePath := Item.ExecutablePath
+				SplitPath, exePath, , exeFolder
+				MsgBox % "Name: " Item.Name "`n`nParameters: " Parameters
+				Break
+			}
+		}
+		Process, Close,% gameFileName
+		Process, WaitClose,% gameFileName
+		Run,% exePath,% exeFolder, , gamePID
+		WinWait, ahk_pid %gamePID%
 	}
 	else {
 		if (noGameDir) {
