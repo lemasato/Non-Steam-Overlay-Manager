@@ -94,7 +94,7 @@
 		}
 	}
 
-	ProgramValues.GamePID :=gameP
+	ProgramValues.GamePID := gamePID
 	Return
 
 	NonSteam_Run_RemoveToolTip:

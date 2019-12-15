@@ -173,6 +173,10 @@ Start_Script() {
 				overlayHotkey := INI.Get(ProgramValues.INI_File, "NSO_Overlay", "Hotkey")
 				Hotkey, ~$%overlayHotkey%, NSO_Overlay_Toggle, On
 			}
+
+			Process, WaitClose,% ProgramValues.GamePID
+			Process, Close, NSO Overlay.exe
+			ExitApp
 		}
 		else { ; Either not a profile or locations invalid
 			MsgBox, 4096,% ProgramValues.Name,% "Unable to launch the profile: " PARAM_PROFILE
@@ -181,10 +185,6 @@ Start_Script() {
 			.									"`n`nPlease make sure locations are correct and try again."
 			GUI_Main.Create()
 		}
-
-		Process, WaitClose,% ProgramValues.GamePID
-		Process, Close, NSO Overlay.exe
-		ExitApp
 	} 
 	else { ; No profile param
 		GUI_Main.Create()
