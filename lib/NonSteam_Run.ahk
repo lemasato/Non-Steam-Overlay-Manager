@@ -56,7 +56,7 @@
 		}
 		Process, Close,% gameFileName
 		Process, WaitClose,% gameFileName
-		Run,% exePath,% exeFolder, , gamePID
+		Run,% exePath " " Parameters,% exeFolder, , gamePID
 		WinWait, ahk_pid %gamePID%
 	}
 	else {
