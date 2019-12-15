@@ -50,7 +50,7 @@
 			if (Trim(Parameters) <> "") && (Item.Name = gameFileName) {
 				exePath := Item.ExecutablePath
 				SplitPath, exePath, , exeFolder
-				MsgBox % "Name: " Item.Name "`n`nParameters: " Parameters
+				; MsgBox % "Name: " Item.Name "`n`nParameters: " Parameters
 				Break
 			}
 		}
